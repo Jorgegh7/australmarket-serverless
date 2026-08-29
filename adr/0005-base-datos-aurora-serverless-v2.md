@@ -10,13 +10,15 @@ Definido el modelo relacional de dos tablas con relación uno-a-muchos (ver ADR 
 
 **Aurora DSQL**: motor serverless distribuido más nuevo (GA mayo 2025), compatible con un subconjunto de PostgreSQL 16. Se factura por DPU sin piso de costo bajo ninguna configuración. No soporta `FOREIGN KEY` ni constraints de exclusión, ni `SEQUENCES` — la integridad referencial debe validarse a nivel de aplicación (Lambda, vía subconsulta antes de cada insert/update relacionado).
 
+**Nota:** `GENERATED ALWAYS AS IDENTITY` (usado para autoincrementar IDs en Aurora Serverless v2) es una abstracción sobre `SEQUENCE` — Postgres crea una secuencia interna por debajo para llevar el conteo. Por eso Aurora DSQL, al no soportar `SEQUENCES`, tampoco soporta esta sintaxis — de ahí el uso de `gen_random_uuid()` como alternativa en las pruebas con DSQL.
+
 ### Decisión inicial (revertida)
 Se eligió primero **Aurora DSQL**, priorizando: ausencia de piso de costo bajo cualquier configuración, modelo de facturación por uso real (DPU) alineado con el resto del stack serverless, y free tier "always free" indefinido (100.000 DPU + 1 GB-mes/mes, sin expiración) frente al free tier de Aurora Serverless v2, atado al "Free Plan" de 6 meses de la cuenta.
 
 ### Por qué se revirtió
-Al evaluar el trade-off pensando en la escalabilidad del **modelo de datos** (no de la base de datos como motor, que sí escala en ambos casos), se identificó que la falta de `FOREIGN KEY` en DSQL no es un problema de escalabilidad técnica, sino que **traslada la responsabilidad de integridad referencial al código de aplicación (Lambda)**. A medida que el modelo crezca con más tablas y relaciones (ej. Producto→Categoría, Producto→Materiales, Pedido→Cliente), cada Lambda que inserte o actualice datos relacionados tendría que implementar manualmente la validación que el motor de Serverless v2 haría de forma automática — aumentando la superficie de código, las pruebas necesarias, y el riesgo de errores de integridad silenciosos en producción (datos corruptos que no fallan al insertarse, a diferencia de una FK que rechaza la operación al momento).
-
-A esto se suma un argumento de diseño de código: el principio de responsabilidad única aplicado a Lambda establece que cada función debería hacer una cosa y hacerla bien, sin mezclar lógica de negocio con trabajo de infraestructura que en rigor le corresponde a la base de datos. Con DSQL, una Lambda que crea un producto tendría que primero buscar el artesano, validar que exista y manejar el caso de error antes de ejecutar su lógica real — dejando de hacer una sola cosa. Ese trabajo adicional no nace de una necesidad del dominio, sino que compensa una limitación de la base de datos elegida.
+- La falta de `FOREIGN KEY` en DSQL no es un problema de escalabilidad del motor — traslada la integridad referencial al código de aplicación (Lambda).
+- A medida que crezcan las tablas/relaciones, cada Lambda que inserte/actualice datos tendría que validar manualmente lo que Serverless v2 hace solo — más código, más pruebas, y riesgo de datos corruptos que no fallan al insertarse (a diferencia de una FK real).
+- Rompe responsabilidad única: una Lambda de "crear producto" tendría que primero validar que el artesano exista, mezclando lógica de negocio con trabajo que le corresponde a la base de datos.
 
 ## Decisión
 Se usa **Aurora Serverless v2** (PostgreSQL) como base de datos de AustralMarket.
