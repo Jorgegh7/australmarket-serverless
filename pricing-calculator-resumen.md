@@ -5,7 +5,7 @@
 | | Lanzamiento | Tracción inicial | Crecimiento |
 |---|---|---|---|
 | Visitas/mes | ~500 | ~10.000 | ~200.000 |
-| **Total AWS/mes** | **~$0.86** | **~$8.92** | **~$193** |
+| **Total AWS/mes** | **~$0.84** | **~$8.80** | **~$193** |
 
 *(Aurora Serverless v2 concentra ~87% del costo en el escenario de crecimiento — el resto del stack es marginal.)*
 
@@ -24,4 +24,4 @@ Aurora Serverless v2 cobra por hora activa, no por visita. El costo se dispara c
 **Para el Sprint 1:** se elige Aurora Serverless v2 porque el tráfico esperado es bajo/variable — la migración a RDS es una decisión de una futura iteración, no una corrección de la actual (ver ADR 005).
 
 ---
-*Detalle completo de supuestos, tarifas y cálculo por servicio: `pricing-calculator-australmarket-RESPALDO.md`.*
+*Detalle completo de supuestos, tarifas y cálculo por servicio: `pricing-calculator-australmarket.md`.*
