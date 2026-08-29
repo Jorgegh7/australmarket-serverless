@@ -53,17 +53,16 @@ Además de los endpoints de negocio (listar productos, gestionar productos), el 
 
 ## Documentación del Sprint 1 (Gate 1 — 29 de agosto de 2026)
 
-- **[Documento maestro](./documento-maestro-australmarket.md)** — punto único de verdad, resume todo lo demás.
-- **Arquitectura**: [diagrama para presentación](./arquitectura-australmarket-presentacion.svg) · [versión completa con VPC/IAM/CloudWatch](./arquitectura-australmarket-completa.svg) · [propuesta a futuro con EventBridge](./arquitectura2-completa-eventbridge.svg)
+- **Arquitectura**: [diagrama principal](./arquitectura-australmarket-presentacion.svg)
 - **[ADRs 001–005](./adr/)** — decisiones de arquitectura formalizadas (región, HTTP API, Amplify Hosting, modelo de datos, base de datos).
-- **Costos**: [resumen](./pricing-calculator-resumen.md) · [detalle completo con supuestos y tarifas](./pricing-calculator-australmarket-RESPALDO.md)
+- **Costos**: [resumen](./pricing-calculator-resumen.md) · [detalle completo con supuestos y tarifas](./pricing-calculator-australmarket.md)
 - **[Seguridad](./seguridad-australmarket.md)** — supuestos explícitos de autenticación, integridad de datos, IAM y superficie de exposición.
-- **[Product Backlog](./product-backlog-australmarket.md)** — 45 story points, distribuidos en los 4 sprints de implementación (Sprint 2 a 5).
+- **[Product Backlog](./product-backlog-australmarket.md)** — 46 story points, distribuidos en los 4 sprints de implementación (Sprint 2 a 5).
 - **[Matriz de responsabilidad (RACI)](./matriz-responsabilidad-australmarket.md)**
 
 **Base de datos elegida:** Aurora Serverless v2 (PostgreSQL) — se evaluó primero Aurora DSQL por su free tier permanente, pero se revirtió por priorizar integridad referencial nativa (`FOREIGN KEY`) sobre el ahorro de costo; ver ADR 005 para el razonamiento completo.
 
-**Costo: serverless no es gratis para siempre.** El gasto mensual va de ~$0.86 (lanzamiento) a ~$193 (tráfico alto sostenido), concentrado en Aurora Serverless v2 (~87% del total en el escenario de crecimiento). El costo escala con **cuánto tiempo la base de datos deja de estar pausada**, no con el número de visitas: por debajo de ~40% de utilización mensual sostenida, Aurora es hasta 99% más barato que una instancia RDS de costo fijo; por encima de ese umbral, la relación se invierte y RDS se vuelve hasta 70% más barato. Ver `pricing-calculator-australmarket-RESPALDO.md` para el detalle completo.
+**Costo: serverless no es gratis para siempre.** El gasto mensual va de ~$0.86 (lanzamiento) a ~$193 (tráfico alto sostenido), concentrado en Aurora Serverless v2 (~87% del total en el escenario de crecimiento). El costo escala con **cuánto tiempo la base de datos deja de estar pausada**, no con el número de visitas: por debajo de ~40% de utilización mensual sostenida, Aurora es hasta 99% más barato que una instancia RDS de costo fijo; por encima de ese umbral, la relación se invierte y RDS se vuelve hasta 70% más barato. Ver `pricing-calculator-australmarket.md` para el detalle completo.
 
 *Pendiente: tabla de servicios CLF-C02 (estudio personal, no crítico para el gate) y subir Epic + historias de usuario a GitHub Issues/Milestones.*
 
