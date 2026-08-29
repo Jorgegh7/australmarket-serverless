@@ -34,6 +34,7 @@ AustralMarket nace bajo el concepto de **"productos con historia"**: no es solo 
 - Pagos o checkout dentro de la plataforma — el contacto se resuelve externamente vía WhatsApp.
 - Newsletter — queda como posible extensión a evaluar, no incluida en este MVP.
 - Múltiples grupos de administración poblados (ej. developer) — se deja como pregunta abierta para el mentor; el diseño lo permite, pero no se implementa en esta vuelta.
+- **Sección propia para Artesanos**: hoy el artesano es solo un dato dentro del detalle de cada producto (una historia breve). Se evalúa para una iteración futura darle presencia propia dentro de la página — una sección "Artesanos" navegable por sí sola, con página personalizada por artesano donde se listen todos sus productos asociados. No incluida en el MVP porque implica nuevas pantallas, nuevos endpoints y una entidad `artesano` con más peso del que tiene hoy.
 
 ## Restricciones
 
