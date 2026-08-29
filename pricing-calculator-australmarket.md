@@ -9,7 +9,8 @@ Estimación de gasto mensual según volumen de tráfico (no según créditos dis
 | Visitas al sitio/mes | ~500 | ~10.000 | ~200.000 |
 | Requests a la API/mes | 2.000 | 50.000 | 1.000.000 |
 | Horas/mes con la BD activa | 5 h (0.5 ACU) | 50 h (1 ACU) | 700 h (2 ACU) |
-| Almacenamiento S3 | 1 GB | 5 GB | 20 GB |
+| Productos en catálogo (curado a mano por 1 admin) | 10-20 | 25-50 | 50-100 |
+| Almacenamiento S3 | ~25 MB | ~65 MB | ~130 MB |
 
 ## Costo mensual estimado por servicio
 
@@ -19,12 +20,13 @@ Estimación de gasto mensual según volumen de tráfico (no según créditos dis
 | API Gateway | ~$0.00 | $0.05 | $1.00 |
 | AWS Lambda ✅ *Always Free* | $0.00 | $0.00 | $0.00 |
 | **Aurora Serverless v2** | $0.40 | $6.21 | **$168.70** |
-| Amazon S3 | $0.02 | $0.12 | $0.46 |
+| Amazon S3 | ~$0.00 | ~$0.00 | ~$0.00 |
 | Amazon Cognito ✅ *Always Free* | $0.00 | $0.00 | $0.00 |
-| **Total estimado** | **~$0.86/mes** | **~$8.92/mes** | **~$193/mes** |
+| **Total estimado** | **~$0.84/mes** | **~$8.80/mes** | **~$192.70/mes** |
 
 **Lecturas clave:**
 - **Cognito se mantiene en $0 en los tres escenarios** — solo el admin se autentica (visitantes sin login), así que los MAU no crecen aunque el tráfico se multiplique por 400x.
+- **S3 es prácticamente gratis en cualquier escenario** — con un catálogo curado a mano por un solo admin (10-100 productos según el escenario, no autopublicación masiva), el volumen de imágenes queda muy por debajo del límite de 5 GB del free tier.
 - **Aurora Serverless v2 domina el costo a escala** — de $0.40 (irrelevante) a $168.70 (~87% del total). Es el trade-off consciente del ADR 005: se priorizó integridad referencial sobre el ahorro de costo de DSQL.
 
 ## ¿Cuándo migrar de Aurora Serverless v2 a RDS provisionado?
