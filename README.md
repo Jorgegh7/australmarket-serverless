@@ -61,7 +61,7 @@ Además de los endpoints de negocio (listar productos, gestionar productos), el 
 
 **Base de datos elegida:** Aurora Serverless v2 (PostgreSQL) — se evaluó primero Aurora DSQL por su free tier permanente, pero se revirtió por priorizar integridad referencial nativa (`FOREIGN KEY`) sobre el ahorro de costo; ver ADR 005 para el razonamiento completo.
 
-**Costo: serverless no es gratis para siempre.** El gasto mensual va de ~$0.86 (lanzamiento) a ~$193 (tráfico alto sostenido), concentrado en Aurora Serverless v2 (~87% del total en el escenario de crecimiento). El costo escala con **cuánto tiempo la base de datos deja de estar pausada**, no con el número de visitas: por debajo de ~40% de utilización mensual sostenida, Aurora es hasta 99% más barato que una instancia RDS de costo fijo; por encima de ese umbral, la relación se invierte y RDS se vuelve hasta 70% más barato. Ver `pricing-calculator-australmarket.md` para el detalle completo.
+**Costo: serverless no es gratis para siempre.** El gasto mensual va de ~$0.84 (lanzamiento) a ~$70 (tráfico alto sostenido), concentrado en Aurora Serverless v2 (~91% del total en el escenario de crecimiento). El costo escala con **cuánto tiempo la base de datos deja de estar pausada**, no con el número de visitas: por debajo de ~40% de utilización mensual sostenida, Aurora es hasta 99% más barato que una instancia RDS de costo fijo; por encima de ese umbral, la relación se invierte y RDS se vuelve hasta 70% más barato. Ver `pricing-calculator-australmarket.md` para el detalle completo.
 
 *Pendiente: tabla de servicios CLF-C02 (estudio personal, no crítico para el gate) y subir Epic + historias de usuario a GitHub Issues/Milestones.*
 

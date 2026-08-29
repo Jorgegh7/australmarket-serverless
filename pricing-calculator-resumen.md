@@ -4,10 +4,10 @@
 
 | | Lanzamiento | Tracción inicial | Crecimiento |
 |---|---|---|---|
-| Visitas/mes | ~500 | ~10.000 | ~200.000 |
-| **Total AWS/mes** | **~$0.84** | **~$8.80** | **~$193** |
+| Visitas/mes | ~500 | ~5.000 | ~50.000 |
+| **Total AWS/mes** | **~$0.84** | **~$5.23** | **~$70** |
 
-*(Aurora Serverless v2 concentra ~87% del costo en el escenario de crecimiento — el resto del stack es marginal.)*
+*(Aurora Serverless v2 concentra ~91% del costo en el escenario de crecimiento — el resto del stack es marginal.)*
 
 ## Serverless no es gratis para siempre — depende de cuánto se usa
 
