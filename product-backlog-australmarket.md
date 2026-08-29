@@ -10,7 +10,7 @@ Este es el backlog completo del proyecto (todo lo que hay que construir para el 
 |---|---|---|
 | HU-B1 | Configurar infraestructura base con Terraform: VPC, Aurora Serverless v2, Cognito User Pool, bucket S3, API Gateway (esqueleto), IAM (execution roles con permisos mínimos definidos junto con la especificación de cada Lambda — no después de su código) | 5 |
 | HU-B2 | Iniciar sesión — integración Cognito + JWT Authorizer en API Gateway, con verificación de grupo (`cognito:groups`) desde el diseño inicial, no solo validación de token | 3 |
-| HU-B3 | CRUD de artesanos (backend) — crear y listar, incluyendo `foto_perfil_url` (apunta a S3) | 3 |
+| HU-B3 | CRUD de artesanos (backend) — crear y listar, incluyendo `foto_perfil_url` (S3), `telefono` (requerido para WhatsApp, HU-F6), `red_social` y `mail` (opcionales) | 3 |
 | HU-B4 | CRUD de productos (backend) — crear, editar, eliminar, con `FOREIGN KEY` a artesano | 5 |
 | HU-B5 | Endpoints públicos del catálogo — listar productos + detalle (sin autenticación) | 3 |
 | HU-B6 | Subida de imagen a S3 — Lambda que genera URL prefirmada para que el frontend suba directo (reutilizada tanto para imagen de producto como foto de artesano) | 3 |
@@ -21,7 +21,7 @@ Este es el backlog completo del proyecto (todo lo que hay que construir para el 
 |---|---|---|
 | HU-F1 | Setup del proyecto frontend (React) — estructura, ruteo, conexión a la API. Incluye wireframes rápidos (login, catálogo, detalle producto, panel admin) antes de programar las pantallas | 3 |
 | HU-F2 | Pantalla de login (admin) | 2 |
-| HU-F3 | Panel admin — formulario crear/listar artesano, con upload de foto de perfil | 3 |
+| HU-F3 | Panel admin — formulario crear/listar artesano, con upload de foto de perfil, teléfono, red social y mail (opcionales estos dos últimos) | 3 |
 | HU-F4 | Panel admin — formulario crear/editar/eliminar producto, con upload de imagen | 5 |
 | HU-F5 | Catálogo público — listado de productos (vista visitante) | 3 |
 | HU-F6 | Detalle de producto — vista pública con historia y foto del artesano, y botón de contacto vía WhatsApp (redirige externo, sin flujo de pago ni chat dentro de la plataforma) | 3 |
@@ -78,6 +78,7 @@ La distribución respeta dependencias reales: no se puede construir el panel adm
 - Soft delete de productos.
 - Cualquier flujo asíncrono — notificaciones, moderación, reportes (ver roadmap a futuro, doc de estudio sección 7.1).
 - Carrito de compra o checkout.
+- Otra forma de contacto: ubicación/local físico — `telefono`, `red_social` y `mail` sí entran al MVP.
 
 ---
 

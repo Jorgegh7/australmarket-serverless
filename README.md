@@ -24,7 +24,7 @@ AustralMarket nace bajo el concepto de **"productos con historia"**: no es solo 
 - El administrador cuenta con un CRUD completo sobre productos (crear, leer, actualizar, eliminar).
 - Cada producto incluye: historia, descripción del producto, imagen y datos de contacto.
 - Filtro por localidad/región (ej. Región de Los Lagos, Región de Los Ríos) en lugar de categoría de producto, dado lo difícil de clasificar productos artesanales por tipo.
-- El botón de contacto redirige a WhatsApp — no existe flujo de pago dentro de la plataforma.
+- El botón de contacto redirige a WhatsApp usando el `telefono` del artesano — no existe flujo de pago dentro de la plataforma. El artesano también puede registrar una red social (un solo link) y correo de contacto. Ubicación de local físico se evaluó y queda fuera del MVP — ver ADR 004 y "Fuera de alcance" en `product-backlog-australmarket.md`.
 - El administrador debe autenticarse antes de poder gestionar productos.
 
 ## Fuera de alcance (por ahora)
