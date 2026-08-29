@@ -10,10 +10,10 @@ Este es el backlog completo del proyecto (todo lo que hay que construir para el 
 |---|---|---|
 | HU-B1 | Configurar infraestructura base con Terraform: VPC, Aurora Serverless v2, Cognito User Pool, bucket S3, API Gateway (esqueleto), IAM (execution roles con permisos mínimos definidos junto con la especificación de cada Lambda — no después de su código) | 5 |
 | HU-B2 | Iniciar sesión — integración Cognito + JWT Authorizer en API Gateway, con verificación de grupo (`cognito:groups`) desde el diseño inicial, no solo validación de token | 3 |
-| HU-B3 | CRUD de artesanos (backend) — crear y listar | 3 |
+| HU-B3 | CRUD de artesanos (backend) — crear y listar, incluyendo `foto_perfil_url` (apunta a S3) | 3 |
 | HU-B4 | CRUD de productos (backend) — crear, editar, eliminar, con `FOREIGN KEY` a artesano | 5 |
 | HU-B5 | Endpoints públicos del catálogo — listar productos + detalle (sin autenticación) | 3 |
-| HU-B6 | Subida de imagen a S3 — Lambda que genera URL prefirmada para que el frontend suba directo | 3 |
+| HU-B6 | Subida de imagen a S3 — Lambda que genera URL prefirmada para que el frontend suba directo (reutilizada tanto para imagen de producto como foto de artesano) | 3 |
 
 ### Track Frontend
 
@@ -21,10 +21,10 @@ Este es el backlog completo del proyecto (todo lo que hay que construir para el 
 |---|---|---|
 | HU-F1 | Setup del proyecto frontend (React) — estructura, ruteo, conexión a la API. Incluye wireframes rápidos (login, catálogo, detalle producto, panel admin) antes de programar las pantallas | 3 |
 | HU-F2 | Pantalla de login (admin) | 2 |
-| HU-F3 | Panel admin — formulario crear/listar artesano | 3 |
+| HU-F3 | Panel admin — formulario crear/listar artesano, con upload de foto de perfil | 3 |
 | HU-F4 | Panel admin — formulario crear/editar/eliminar producto, con upload de imagen | 5 |
 | HU-F5 | Catálogo público — listado de productos (vista visitante) | 3 |
-| HU-F6 | Detalle de producto — vista pública con historia del artesano y botón de contacto vía WhatsApp (redirige externo, sin flujo de pago ni chat dentro de la plataforma) | 3 |
+| HU-F6 | Detalle de producto — vista pública con historia y foto del artesano, y botón de contacto vía WhatsApp (redirige externo, sin flujo de pago ni chat dentro de la plataforma) | 3 |
 
 ### Track Despliegue / QA
 
@@ -78,6 +78,25 @@ La distribución respeta dependencias reales: no se puede construir el panel adm
 - Soft delete de productos.
 - Cualquier flujo asíncrono — notificaciones, moderación, reportes (ver roadmap a futuro, doc de estudio sección 7.1).
 - Carrito de compra o checkout.
+
+---
+
+## Propuesta a futuro: Sprint 6 — Sección propia de Artesanos (extra, fuera de los 4 sprints)
+
+Evaluada con el mismo nivel de detalle que el resto del backlog, para poder contrastarla — y decidir conscientemente posponerla, no descartarla por defecto.
+
+| Tarea | Por qué | Story points |
+|---|---|---|
+| Endpoint `GET /artesanos/{id}` | Traer datos de un artesano específico (nombre, historia, foto) | 1 |
+| Endpoint `GET /artesanos/{id}/productos` | Todos los productos de ese artesano (reutiliza la misma consulta `WHERE artesano_id = X` del detalle de producto) | 2 |
+| Pantalla: perfil de artesano | Datos + lista de sus productos (reutiliza el componente de card de producto del catálogo) | 3 |
+| Pantalla: listado de "Artesanos" | Catálogo de artesanos, análogo al de productos | 3 |
+| Navegación | Ruta/link nuevo en el menú del sitio | 1 |
+| **Total** | | **~10 pts** |
+
+**Por qué no entra en los 4 sprints actuales:** ~10 puntos equivalen aproximadamente a un sprint completo adicional (los Sprints 2-5 rondan 11-13 pts cada uno) — el tiempo disponible de la mentoría (16 ago–23 oct 2026, sprints quincenales) no contempla un quinto sprint de implementación. No es una limitación técnica ni de diseño (el modelo de datos ya lo soporta sin cambios — ver ADR 004), es una limitación de tiempo/alcance frente al resto del backlog priorizado.
+
+**Por qué el costo es relativamente bajo pese a ser "un sprint más":** reutiliza casi todo lo ya construido — mismo modelo de datos, misma lógica de consulta, mismo componente visual de card. No es una feature nueva desde cero, es una recombinación de piezas existentes.
 
 ## Nota para el gate
 
