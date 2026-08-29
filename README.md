@@ -34,7 +34,7 @@ AustralMarket nace bajo el concepto de **"productos con historia"**: no es solo 
 - Pagos o checkout dentro de la plataforma — el contacto se resuelve externamente vía WhatsApp.
 - Newsletter — queda como posible extensión a evaluar, no incluida en este MVP.
 - Múltiples grupos de administración poblados (ej. developer) — se deja como pregunta abierta para el mentor; el diseño lo permite, pero no se implementa en esta vuelta.
-- **Sección propia para Artesanos**: hoy el artesano es solo un dato dentro del detalle de cada producto (una historia breve). Se evalúa para una iteración futura darle presencia propia dentro de la página — una sección "Artesanos" navegable por sí sola, con página personalizada por artesano donde se listen todos sus productos asociados. No incluida en el MVP porque implica nuevas pantallas, nuevos endpoints y una entidad `artesano` con más peso del que tiene hoy.
+- **Sección propia para Artesanos**: hoy el artesano es solo un dato dentro del detalle de cada producto (una historia breve). Se evalúa para una iteración futura darle presencia propia dentro de la página — una sección "Artesanos" navegable por sí sola, con página personalizada por artesano donde se listen todos sus productos asociados. La relación de datos no cambia (sigue siendo un artesano con muchos productos, mismo `FOREIGN KEY` del ADR 004) — el esquema ya incluye `foto_perfil_url` desde el diseño inicial (apuntando a S3) para evitar una migración futura, aunque el MVP no la use todavía. Lo que sí falta es un endpoint de consulta (`GET /artesanos/{id}/productos`) y una pantalla de frontend. No incluida en el MVP por no ser prioritaria frente al resto del backlog.
 
 ## Restricciones
 
