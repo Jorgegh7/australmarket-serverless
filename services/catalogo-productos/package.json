@@ -1,0 +1,23 @@
+{
+  "name": "catalogo-productos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.163",
+    "@types/node": "^26.6.2",
+    "@types/pg": "^8.23.1",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@aws-sdk/dsql-signer": "^3.1136.0",
+    "pg": "^8.23.0"
+  }
+}

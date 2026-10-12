@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+.terraform.lock.hcl.bak
+
+# Artefactos de build
+*.zip
+dist/
+build/
+
+# Secretos y entorno
+.env
+.env.*
+!.env.example
+
+# Salidas de pruebas locales
+respuesta-*.json
+
+# Sistema
+.DS_Store
+Thumbs.db

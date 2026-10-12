@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "esnext",
+    "types": [
+      "node"
+    ],
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  }
+}
