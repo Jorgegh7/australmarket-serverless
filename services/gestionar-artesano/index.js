@@ -4,7 +4,33 @@ exports.handler = void 0;
 const dsql_signer_1 = require("@aws-sdk/dsql-signer");
 const pg_1 = require("pg");
 const CLUSTER_ENDPOINT = process.env.DSQL_ENDPOINT;
+function respuesta(statusCode, data) {
+    return {
+        statusCode,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    };
+}
 const handler = async (event) => {
+    // HTTP API con payload format 2.0: el metodo viene en requestContext.http.method
+    const method = event.requestContext.http.method;
+    const id = event.pathParameters?.id;
+    // Body: validar antes de abrir la conexion a la base
+    let body = {};
+    if (event.body) {
+        try {
+            const raw = event.isBase64Encoded
+                ? Buffer.from(event.body, "base64").toString("utf-8")
+                : event.body;
+            body = JSON.parse(raw);
+        }
+        catch {
+            return respuesta(400, { mensaje: "El cuerpo de la solicitud no es un JSON valido" });
+        }
+    }
+    if ((method === "POST" || method === "PUT") && (!body.nombre || !body.telefono)) {
+        return respuesta(400, { mensaje: "Nombre y telefono son obligatorios" });
+    }
     const signer = new dsql_signer_1.DsqlSigner({
         hostname: CLUSTER_ENDPOINT,
         region: "us-east-1",
@@ -20,28 +46,40 @@ const handler = async (event) => {
     });
     await client.connect();
     try {
-        const method = event.httpMethod;
-        const body = event.body ? JSON.parse(event.body) : {};
-        const id = event.pathParameters?.id;
         // CREAR
         if (method === "POST") {
             const result = await client.query(`INSERT INTO artesanos (nombre, historia, region, foto_perfil_url, telefono, red_social, mail)
          VALUES ($1, $2, $3, $4, $5, $6, $7)
          RETURNING id`, [body.nombre, body.historia, body.region, body.foto_perfil_url, body.telefono, body.red_social, body.mail]);
-            return { statusCode: 201, body: JSON.stringify(result.rows[0]) };
+            return respuesta(201, result.rows[0]);
         }
         // EDITAR
         if (method === "PUT" && id) {
-            await client.query(`UPDATE artesanos SET nombre=$1, historia=$2, region=$3, foto_perfil_url=$4, telefono=$5, red_social=$6, mail=$7
+            const result = await client.query(`UPDATE artesanos SET nombre=$1, historia=$2, region=$3, foto_perfil_url=$4, telefono=$5, red_social=$6, mail=$7
          WHERE id=$8`, [body.nombre, body.historia, body.region, body.foto_perfil_url, body.telefono, body.red_social, body.mail, id]);
-            return { statusCode: 200, body: JSON.stringify({ mensaje: "Artesano actualizado" }) };
+            if (result.rowCount === 0) {
+                return respuesta(404, { mensaje: "Artesano no encontrado" });
+            }
+            return respuesta(200, { mensaje: "Artesano actualizado" });
         }
         // ELIMINAR
         if (method === "DELETE" && id) {
-            await client.query("DELETE FROM artesanos WHERE id=$1", [id]);
-            return { statusCode: 200, body: JSON.stringify({ mensaje: "Artesano eliminado" }) };
+            try {
+                const result = await client.query("DELETE FROM artesanos WHERE id=$1", [id]);
+                if (result.rowCount === 0) {
+                    return respuesta(404, { mensaje: "Artesano no encontrado" });
+                }
+                return respuesta(200, { mensaje: "Artesano eliminado" });
+            }
+            catch (err) {
+                // Error 23503 = violacion de FOREIGN KEY (el artesano todavia tiene productos)
+                if (err.code === "23503") {
+                    return respuesta(409, { mensaje: "No se puede eliminar: el artesano tiene productos asociados" });
+                }
+                throw err;
+            }
         }
-        return { statusCode: 400, body: JSON.stringify({ mensaje: "Metodo no soportado" }) };
+        return respuesta(400, { mensaje: "Metodo no soportado" });
     }
     finally {
         await client.end();
