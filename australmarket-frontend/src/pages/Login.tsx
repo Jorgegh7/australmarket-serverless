@@ -44,7 +44,7 @@ export default function Login() {
 
                 <hr className={styles.divider} />
 
-                <h1 className={styles.title}>Acceso administrador</h1>
+                <h1 className={styles.title}>Iniciar sesión</h1>
                 <p className={styles.subtitle}>Ingresa tus credenciales para continuar</p>
 
                 <form className={styles.form} onSubmit={handleSubmit} noValidate>

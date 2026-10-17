@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError, callApi } from "../api/client";
+import ContactoModal from "../components/ContactoModal";
 import Imagen from "../components/Imagen";
 import { formatPrecioCLP } from "../utils/formatPrecio";
-import type { ArtesanoPublico, ProductoPublico } from "../types/catalogo";
+import type { ProductoDetalle } from "../types/productoDetalle";
 import styles from "./DetalleProducto.module.css";
 
 type Estado = "cargando" | "error" | "no-encontrado" | "listo";
@@ -11,30 +12,34 @@ type Estado = "cargando" | "error" | "no-encontrado" | "listo";
 export default function DetalleProducto() {
     const { id } = useParams<{ id: string }>();
 
-    const [productos, setProductos] = useState<ProductoPublico[]>([]);
-    const [artesanos, setArtesanos] = useState<ArtesanoPublico[]>([]);
+    const [producto, setProducto] = useState<ProductoDetalle | null>(null);
     const [estado, setEstado] = useState<Estado>("cargando");
     const [errorMensaje, setErrorMensaje] = useState<string | null>(null);
+    const [confirmandoContacto, setConfirmandoContacto] = useState(false);
 
-    // No existe GET /catalogo/productos/{id}: se trae la lista completa y se
-    // filtra por id en el cliente (igual que en el catálogo).
+    // Una sola llamada a GET /catalogo/productos/{id}. 400/404 = no encontrado.
     useEffect(() => {
         let cancelado = false;
 
         async function cargar() {
             setEstado("cargando");
             setErrorMensaje(null);
+            setProducto(null);
+            if (!id) {
+                setEstado("no-encontrado");
+                return;
+            }
             try {
-                const [productosData, artesanosData] = await Promise.all([
-                    callApi<ProductoPublico[]>("/catalogo/productos"),
-                    callApi<ArtesanoPublico[]>("/catalogo/artesanos"),
-                ]);
+                const data = await callApi<ProductoDetalle>(`/catalogo/productos/${encodeURIComponent(id)}`);
                 if (cancelado) return;
-                setProductos(productosData);
-                setArtesanos(artesanosData);
+                setProducto(data);
                 setEstado("listo");
             } catch (error) {
                 if (cancelado) return;
+                if (error instanceof ApiError && (error.status === 400 || error.status === 404)) {
+                    setEstado("no-encontrado");
+                    return;
+                }
                 setErrorMensaje(
                     error instanceof ApiError
                         ? error.message
@@ -48,14 +53,7 @@ export default function DetalleProducto() {
         return () => {
             cancelado = true;
         };
-    }, []);
-
-    const producto = useMemo(() => productos.find((p) => String(p.id) === id), [productos, id]);
-
-    const artesano = useMemo(
-        () => (producto ? artesanos.find((a) => String(a.id) === String(producto.artesano_id)) : undefined),
-        [artesanos, producto],
-    );
+    }, [id]);
 
     if (estado === "cargando") {
         return (
@@ -75,15 +73,27 @@ export default function DetalleProducto() {
         );
     }
 
-    if (!producto) {
+    if (estado === "no-encontrado" || !producto) {
         return (
             <main className={styles.page}>
-                <p className={styles.status}>Producto no encontrado.</p>
+                <p className={styles.status}>Producto no encontrado</p>
                 <Link to="/" className={styles.backLink}>
                     Volver al catálogo
                 </Link>
             </main>
         );
+    }
+
+    const { artesano } = producto;
+    // wa.me exige solo dígitos (sin "+", espacios ni guiones).
+    const numeroWhatsapp = (artesano.telefono ?? "").replace(/\D/g, "");
+
+    function continuarAWhatsapp() {
+        const mensaje = encodeURIComponent(
+            `Hola, vi "${producto?.nombre}" en AustralMarket y me gustaría saber más.`,
+        );
+        window.open(`https://wa.me/${numeroWhatsapp}?text=${mensaje}`, "_blank", "noopener,noreferrer");
+        setConfirmandoContacto(false);
     }
 
     return (
@@ -105,33 +115,41 @@ export default function DetalleProducto() {
                     <p className={styles.precio}>{formatPrecioCLP(producto.precio)}</p>
                     <p className={styles.historia}>{producto.historia}</p>
 
-                    {artesano && (
-                        <div className={styles.artesano}>
-                            <Imagen
-                                src={artesano.foto_perfil_url}
-                                alt={artesano.nombre}
-                                className={styles.artesanoFoto}
-                            />
-                            <div>
-                                <h2 className={styles.artesanoNombre}>{artesano.nombre}</h2>
-                                <p className={styles.artesanoRegion}>{artesano.region}</p>
-                                <p className={styles.artesanoHistoria}>{artesano.historia}</p>
-                            </div>
+                    <div className={styles.artesano}>
+                        <Imagen
+                            src={artesano.foto_perfil_url}
+                            alt={artesano.nombre}
+                            className={styles.artesanoFoto}
+                        />
+                        <div>
+                            <h2 className={styles.artesanoNombre}>{artesano.nombre}</h2>
+                            <p className={styles.artesanoRegion}>{artesano.region}</p>
+                            <p className={styles.artesanoHistoria}>{artesano.historia}</p>
                         </div>
-                    )}
+                    </div>
 
-                    {/* TODO: implementar contacto con el artesano. El catálogo
-                        público no expone teléfono ni mail (intencional, ver
-                        CLAUDE.md); falta definir cómo se resuelve en una
-                        historia futura. */}
-                    <button type="button" className={styles.contactar} disabled title="Próximamente">
+                    <button
+                        type="button"
+                        className={styles.contactar}
+                        disabled={!numeroWhatsapp}
+                        onClick={() => setConfirmandoContacto(true)}
+                    >
                         Contactar al artesano
                     </button>
-                    <p className={styles.contactarNota}>
-                        El contacto directo con el artesano todavía no está disponible.
-                    </p>
+                    {!numeroWhatsapp && (
+                        <p className={styles.contactarNota}>Este artesano no tiene contacto disponible</p>
+                    )}
                 </div>
             </div>
+
+            {confirmandoContacto && (
+                <ContactoModal
+                    artesanoNombre={artesano.nombre}
+                    productoNombre={producto.nombre}
+                    onCancelar={() => setConfirmandoContacto(false)}
+                    onContinuar={continuarAWhatsapp}
+                />
+            )}
         </main>
     );
 }

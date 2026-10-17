@@ -138,13 +138,23 @@
 
 .contactar {
   margin-top: 8px;
-  background: var(--color-border);
-  color: var(--color-text-muted);
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
   border: none;
   border-radius: 8px;
   padding: 12px;
   font-size: 15px;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.contactar:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.contactar:disabled {
+  background: var(--color-border);
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }
 

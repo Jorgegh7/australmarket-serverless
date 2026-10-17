@@ -87,9 +87,6 @@ export default function Catalogo() {
                 <Link to="/" className={styles.brand}>
                     AustralMarket
                 </Link>
-                <Link to="/login" className={styles.adminLink}>
-                    Acceso administrador
-                </Link>
             </div>
 
             <div className={styles.hero}>

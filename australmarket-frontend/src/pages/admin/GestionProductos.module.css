@@ -116,3 +116,12 @@ tbody tr:last-child td {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.miniatura {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-sizing: border-box;
+}

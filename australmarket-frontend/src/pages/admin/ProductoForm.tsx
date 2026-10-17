@@ -3,6 +3,9 @@ import styles from "./ProductoForm.module.css";
 import type { Producto, ProductoInput } from "../../types/producto";
 import type { Artesano } from "../../types/artesano";
 import Modal from "../../components/Modal";
+import ImagenUploader from "../../components/ImagenUploader";
+import { subirImagen } from "../../api/imagenes";
+import { useProtectedApi } from "../../auth/useProtectedApi";
 
 interface ProductoFormProps {
     producto: Producto | null;
@@ -57,22 +60,47 @@ export default function ProductoForm({
             : VACIO,
     );
 
+    const protectedApi = useProtectedApi();
+    const [archivo, setArchivo] = useState<File | null>(null);
+    const [subiendo, setSubiendo] = useState(false);
+    const [errorSubida, setErrorSubida] = useState<string | null>(null);
+
     function actualizar<K extends keyof FormState>(campo: K, valor: FormState[K]) {
         setValores((actual) => ({ ...actual, [campo]: valor }));
     }
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        setErrorSubida(null);
+
+        // La imagen se sube al guardar (no al seleccionar) para no dejar
+        // archivos huérfanos si el usuario cancela. Si falla, no se guarda.
+        // Sin archivo nuevo se conserva el valor actual (clave o vacío).
+        let imagenUrl = valores.imagen_url;
+        if (archivo) {
+            setSubiendo(true);
+            try {
+                imagenUrl = await subirImagen(protectedApi, "producto", archivo);
+            } catch (e) {
+                setErrorSubida(e instanceof Error ? e.message : "No se pudo subir la imagen.");
+                return;
+            } finally {
+                setSubiendo(false);
+            }
+        }
+
         onGuardar({
             // artesano_id es un uuid: se manda tal cual, nunca por Number().
             artesano_id: valores.artesano_id,
             nombre: valores.nombre,
             historia: valores.historia,
-            imagen_url: valores.imagen_url,
+            imagen_url: imagenUrl,
             precio: valores.precio,
             categoria: valores.categoria,
         });
     }
+
+    const ocupado = guardando || subiendo;
 
     return (
         <Modal titulo={producto ? "Editar producto" : "Nuevo producto"} onCerrar={onCancelar}>
@@ -131,14 +159,20 @@ export default function ProductoForm({
                     />
                 </div>
 
-                <div className={styles.field}>
-                    <label htmlFor="imagen_url">URL de imagen</label>
-                    <input
-                        id="imagen_url"
-                        value={valores.imagen_url}
-                        onChange={(event) => actualizar("imagen_url", event.target.value)}
-                    />
-                </div>
+                <ImagenUploader
+                    id="imagen_url"
+                    label="Imagen del producto"
+                    valorActual={valores.imagen_url}
+                    urlActual={producto?.imagen_url_firmada}
+                    archivo={archivo}
+                    subiendo={subiendo}
+                    disabled={ocupado}
+                    onSeleccionar={setArchivo}
+                    onQuitar={() => {
+                        setArchivo(null);
+                        actualizar("imagen_url", "");
+                    }}
+                />
 
                 <div className={styles.field}>
                     <label htmlFor="historia">Historia</label>
@@ -150,18 +184,18 @@ export default function ProductoForm({
                     />
                 </div>
 
-                {error && (
+                {(errorSubida ?? error) && (
                     <p className={styles.error} role="alert">
-                        {error}
+                        {errorSubida ?? error}
                     </p>
                 )}
 
                 <div className={styles.actions}>
-                    <button type="button" className={styles.cancelar} onClick={onCancelar} disabled={guardando}>
+                    <button type="button" className={styles.cancelar} onClick={onCancelar} disabled={ocupado}>
                         Cancelar
                     </button>
-                    <button type="submit" className={styles.guardar} disabled={guardando}>
-                        {guardando ? "Guardando…" : "Guardar"}
+                    <button type="submit" className={styles.guardar} disabled={ocupado}>
+                        {subiendo ? "Subiendo imagen..." : guardando ? "Guardando…" : "Guardar"}
                     </button>
                 </div>
             </form>

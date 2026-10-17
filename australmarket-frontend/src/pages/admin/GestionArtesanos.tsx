@@ -3,6 +3,7 @@ import { ApiError } from "../../api/client";
 import { useProtectedApi } from "../../auth/useProtectedApi";
 import type { Artesano, ArtesanoInput } from "../../types/artesano";
 import ArtesanoForm from "./ArtesanoForm";
+import Imagen from "../../components/Imagen";
 import styles from "./GestionArtesanos.module.css";
 
 type Estado = "cargando" | "error" | "listo";
@@ -141,6 +142,7 @@ export default function GestionArtesanos() {
                     <table>
                         <thead>
                             <tr>
+                                <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Región</th>
                                 <th>Teléfono</th>
@@ -152,6 +154,13 @@ export default function GestionArtesanos() {
                         <tbody>
                             {artesanos.map((artesano) => (
                                 <tr key={artesano.id}>
+                                    <td>
+                                        <Imagen
+                                            src={artesano.foto_perfil_url_firmada}
+                                            alt={`Foto de ${artesano.nombre}`}
+                                            className={styles.miniatura}
+                                        />
+                                    </td>
                                     <td>{artesano.nombre}</td>
                                     <td>{artesano.region || "—"}</td>
                                     <td>{artesano.telefono || "—"}</td>

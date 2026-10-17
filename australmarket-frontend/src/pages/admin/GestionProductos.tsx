@@ -5,6 +5,7 @@ import type { Artesano } from "../../types/artesano";
 import type { Producto, ProductoInput } from "../../types/producto";
 import { formatPrecioCLP } from "../../utils/formatPrecio";
 import ProductoForm from "./ProductoForm";
+import Imagen from "../../components/Imagen";
 import styles from "./GestionProductos.module.css";
 
 type Estado = "cargando" | "error" | "listo";
@@ -160,6 +161,7 @@ export default function GestionProductos() {
                     <table>
                         <thead>
                             <tr>
+                                <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Artesano</th>
                                 <th>Categoría</th>
@@ -170,6 +172,13 @@ export default function GestionProductos() {
                         <tbody>
                             {productos.map((producto) => (
                                 <tr key={producto.id}>
+                                    <td>
+                                        <Imagen
+                                            src={producto.imagen_url_firmada}
+                                            alt={`Imagen de ${producto.nombre}`}
+                                            className={styles.miniatura}
+                                        />
+                                    </td>
                                     <td>{producto.nombre}</td>
                                     <td>{artesanoPorId.get(String(producto.artesano_id))?.nombre ?? "—"}</td>
                                     <td>{producto.categoria || "—"}</td>

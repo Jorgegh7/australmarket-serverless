@@ -3,6 +3,9 @@ import styles from "./ArtesanoForm.module.css";
 import type { Artesano, ArtesanoInput } from "../../types/artesano";
 import { REGIONES_CHILE } from "../../constants/regiones";
 import Modal from "../../components/Modal";
+import ImagenUploader from "../../components/ImagenUploader";
+import { subirImagen } from "../../api/imagenes";
+import { useProtectedApi } from "../../auth/useProtectedApi";
 
 interface ArtesanoFormProps {
     artesano: Artesano | null;
@@ -48,14 +51,39 @@ export default function ArtesanoForm({ artesano, guardando, error, onCancelar, o
         return REGIONES_CHILE;
     }, [artesano]);
 
+    const protectedApi = useProtectedApi();
+    const [archivo, setArchivo] = useState<File | null>(null);
+    const [subiendo, setSubiendo] = useState(false);
+    const [errorSubida, setErrorSubida] = useState<string | null>(null);
+
     function actualizar<K extends keyof ArtesanoInput>(campo: K, valor: ArtesanoInput[K]) {
         setValores((actual) => ({ ...actual, [campo]: valor }));
     }
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        onGuardar(valores);
+        setErrorSubida(null);
+
+        // La imagen se sube al guardar (no al seleccionar) para no dejar
+        // archivos huérfanos si el usuario cancela. Si falla, no se guarda.
+        // Sin archivo nuevo se conserva el valor actual (clave o vacío).
+        let fotoPerfil = valores.foto_perfil_url;
+        if (archivo) {
+            setSubiendo(true);
+            try {
+                fotoPerfil = await subirImagen(protectedApi, "artesano", archivo);
+            } catch (e) {
+                setErrorSubida(e instanceof Error ? e.message : "No se pudo subir la imagen.");
+                return;
+            } finally {
+                setSubiendo(false);
+            }
+        }
+
+        onGuardar({ ...valores, foto_perfil_url: fotoPerfil });
     }
+
+    const ocupado = guardando || subiendo;
 
     return (
         <Modal titulo={artesano ? "Editar artesano" : "Nuevo artesano"} onCerrar={onCancelar}>
@@ -115,14 +143,20 @@ export default function ArtesanoForm({ artesano, guardando, error, onCancelar, o
                     />
                 </div>
 
-                <div className={styles.field}>
-                    <label htmlFor="foto_perfil_url">URL de foto de perfil</label>
-                    <input
-                        id="foto_perfil_url"
-                        value={valores.foto_perfil_url}
-                        onChange={(event) => actualizar("foto_perfil_url", event.target.value)}
-                    />
-                </div>
+                <ImagenUploader
+                    id="foto_perfil_url"
+                    label="Foto de perfil"
+                    valorActual={valores.foto_perfil_url}
+                    urlActual={artesano?.foto_perfil_url_firmada}
+                    archivo={archivo}
+                    subiendo={subiendo}
+                    disabled={ocupado}
+                    onSeleccionar={setArchivo}
+                    onQuitar={() => {
+                        setArchivo(null);
+                        actualizar("foto_perfil_url", "");
+                    }}
+                />
 
                 <div className={styles.field}>
                     <label htmlFor="historia">Historia</label>
@@ -134,18 +168,18 @@ export default function ArtesanoForm({ artesano, guardando, error, onCancelar, o
                     />
                 </div>
 
-                {error && (
+                {(errorSubida ?? error) && (
                     <p className={styles.error} role="alert">
-                        {error}
+                        {errorSubida ?? error}
                     </p>
                 )}
 
                 <div className={styles.actions}>
-                    <button type="button" className={styles.cancelar} onClick={onCancelar} disabled={guardando}>
+                    <button type="button" className={styles.cancelar} onClick={onCancelar} disabled={ocupado}>
                         Cancelar
                     </button>
-                    <button type="submit" className={styles.guardar} disabled={guardando}>
-                        {guardando ? "Guardando…" : "Guardar"}
+                    <button type="submit" className={styles.guardar} disabled={ocupado}>
+                        {subiendo ? "Subiendo imagen..." : guardando ? "Guardando…" : "Guardar"}
                     </button>
                 </div>
             </form>

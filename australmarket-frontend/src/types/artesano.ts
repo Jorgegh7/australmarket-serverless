@@ -7,9 +7,11 @@ export interface Artesano {
     historia: string;
     region: string;
     foto_perfil_url: string;
+    // URL temporal solo para mostrar; al guardar se envía la clave (foto_perfil_url).
+    foto_perfil_url_firmada?: string | null;
     telefono: string;
     red_social: string;
     mail: string;
 }
 
-export type ArtesanoInput = Omit<Artesano, "id">;
+export type ArtesanoInput = Omit<Artesano, "id" | "foto_perfil_url_firmada">;
