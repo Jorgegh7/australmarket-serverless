@@ -14,6 +14,10 @@ module "catalogo_artesanos" {
   api_execution_arn = aws_apigatewayv2_api.australmarket.execution_arn
   dsql_endpoint     = var.dsql_endpoint
   tags              = var.common_tags
+
+  variables_extra = {
+    BUCKET_NAME = aws_s3_bucket.australmarket.id
+  }
 }
 
 module "catalogo_productos" {
@@ -28,4 +32,8 @@ module "catalogo_productos" {
   api_execution_arn = aws_apigatewayv2_api.australmarket.execution_arn
   dsql_endpoint     = var.dsql_endpoint
   tags              = var.common_tags
+
+  variables_extra = {
+    BUCKET_NAME = aws_s3_bucket.australmarket.id
+  }
 }

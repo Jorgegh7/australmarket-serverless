@@ -15,9 +15,10 @@ resource "aws_lambda_function" "this" {
   source_code_hash = data.archive_file.this.output_base64sha256
 
   environment {
-    variables = {
-      DSQL_ENDPOINT = var.dsql_endpoint
-    }
+    variables = merge(
+      { DSQL_ENDPOINT = var.dsql_endpoint },
+      var.variables_extra
+    )
   }
 
   tags = merge(var.tags, {

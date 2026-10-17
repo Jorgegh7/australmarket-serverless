@@ -8,14 +8,15 @@ resource "aws_s3_bucket" "australmarket" {
   })
 }
 
-# Bloquea toda forma de acceso publico al bucket
+# Bucket totalmente privado: las imagenes se leen solo con URLs firmadas
+# generadas por las Lambdas (s3:GetObject en sus roles)
 resource "aws_s3_bucket_public_access_block" "australmarket" {
   bucket = aws_s3_bucket.australmarket.id
 
-  block_public_acls       = true  # seguimos bloqueando ACLs publicas (metodo viejo/inseguro)
-  block_public_policy     = false # permite que una bucket policy otorgue lectura publica
-  ignore_public_acls      = true  # seguimos ignorando ACLs publicas si alguien las intenta
-  restrict_public_buckets = false # permite que el bucket tenga una politica publica activa
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 # Cifrado en reposo con la llave KMS propia de S3 (no la generica de AWS)
@@ -29,23 +30,4 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "australmarket" {
     }
     bucket_key_enabled = true
   }
-}
-
-resource "aws_s3_bucket_policy" "public_read" {
-  bucket = aws_s3_bucket.australmarket.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject"
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.australmarket.arn}/*"
-      }
-    ]
-  })
-
-  depends_on = [aws_s3_bucket_public_access_block.australmarket]
 }

@@ -52,3 +52,9 @@ variable "tags" {
   description = "Tags comunes a aplicar"
   type        = map(string)
 }
+
+variable "variables_extra" {
+  description = "Variables de entorno adicionales para la Lambda (se suman a DSQL_ENDPOINT)"
+  type        = map(string)
+  default     = {}
+}

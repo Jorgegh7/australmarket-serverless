@@ -11,6 +11,10 @@ module "listar_artesanos" {
   authorizer_id     = aws_apigatewayv2_authorizer.cognito.id
   dsql_endpoint     = var.dsql_endpoint
   tags              = var.common_tags
+
+  variables_extra = {
+    BUCKET_NAME = aws_s3_bucket.australmarket.id
+  }
 }
 
 module "gestionar_artesano" {
