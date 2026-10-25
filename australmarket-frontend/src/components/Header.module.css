@@ -1,0 +1,158 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--alto-navbar);
+  background: var(--color-lienzo);
+  border-bottom: 1px solid var(--color-escarcha);
+}
+
+.barra {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  max-width: var(--ancho-contenedor);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--espacio-3);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-tactil);
+  text-decoration: none;
+  border-radius: var(--radio-input);
+}
+
+.nav {
+  display: block;
+}
+
+.lista {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-tactil);
+  color: var(--color-bosque);
+  font-size: var(--texto-14);
+  font-weight: 400;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.enlace:hover {
+  border-bottom-color: var(--color-bosque);
+}
+
+.activo {
+  font-weight: 500;
+  border-bottom-color: var(--color-bosque);
+}
+
+/* CTA en píldora: primario del sistema de botones. */
+.cta {
+  composes: primario from "../styles/botones.module.css";
+}
+
+.hamburguesa {
+  display: none;
+  width: var(--alto-tactil);
+  height: var(--alto-tactil);
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--color-escarcha);
+  border-radius: var(--radio-pill);
+  cursor: pointer;
+  color: var(--color-bosque);
+}
+
+.lineas,
+.lineas::before,
+.lineas::after {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+.lineas {
+  position: relative;
+}
+
+.lineas::before,
+.lineas::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.lineas::before {
+  top: -6px;
+}
+
+.lineas::after {
+  top: 6px;
+}
+
+.lineas[data-abierto="true"] {
+  background: transparent;
+}
+
+.lineas[data-abierto="true"]::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.lineas[data-abierto="true"]::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 767px) {
+  .hamburguesa {
+    display: inline-flex;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-lienzo);
+    border-bottom: 1px solid var(--color-escarcha);
+    padding: var(--espacio-1) var(--espacio-3) var(--espacio-3);
+  }
+
+  .nav[data-abierto="true"] {
+    display: block;
+  }
+
+  .lista {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--espacio-1);
+  }
+
+  .enlace {
+    border-bottom: none;
+  }
+
+  .activo {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+}

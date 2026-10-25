@@ -1,0 +1,41 @@
+.mapa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-1);
+  margin: 0;
+}
+
+.svg {
+  display: block;
+  height: 380px;
+  max-height: 55vh;
+  width: auto;
+  max-width: 100%;
+}
+
+.region {
+  fill: var(--color-piedra);
+  stroke: var(--color-escarcha);
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+}
+
+.activa {
+  fill: var(--color-bosque);
+  stroke: var(--color-lienzo);
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+
+.punto {
+  fill: var(--color-lima);
+  stroke: var(--color-bosque);
+  stroke-width: 1;
+}
+
+.leyenda {
+  composes: etiquetaMono from "../styles/botones.module.css";
+  text-align: center;
+  max-width: 200px;
+}

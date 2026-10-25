@@ -1,25 +1,23 @@
 .page {
   flex: 1;
-  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
+  gap: var(--espacio-3);
   width: 100%;
-  box-sizing: border-box;
+  max-width: var(--ancho-contenedor);
+  margin: 0 auto;
+  padding: var(--espacio-3) var(--espacio-3) var(--espacio-6);
 }
 
 .status {
-  color: var(--color-text-muted);
-  padding: 48px 0;
+  color: var(--color-peltre);
+  padding: var(--espacio-5) 0;
   text-align: center;
 }
 
 .backLink {
+  composes: enlaceFlecha from "../styles/botones.module.css";
   align-self: center;
-  color: var(--color-primary);
-  font-size: 14px;
 }
 
 .breadcrumb {
@@ -27,12 +25,15 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  color: var(--color-text-muted);
+  font-size: var(--texto-14);
+  color: var(--color-peltre);
 }
 
 .breadcrumb a {
-  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-tactil);
+  color: var(--color-peltre);
   text-decoration: none;
 }
 
@@ -41,46 +42,48 @@
 }
 
 .breadcrumbActual {
-  color: var(--color-text);
-  font-weight: 600;
+  color: var(--color-bosque);
+  font-weight: 500;
 }
 
+/* Una columna en móvil; dos desde 900px. */
 .layout {
   display: grid;
-  grid-template-columns: minmax(280px, 420px) 1fr;
-  gap: 28px;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-4);
   align-items: start;
 }
 
-@media (max-width: 720px) {
+@media (min-width: 900px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--espacio-5);
   }
 }
 
 .imagen {
+  display: block;
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 12px;
+  border-radius: var(--radio-grande);
   object-fit: cover;
-  border: 1px solid var(--color-border);
+  overflow: hidden;
 }
 
 .info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--espacio-2);
 }
 
-.badge {
-  align-self: flex-start;
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
+}
+
+.etiqueta {
+  composes: etiquetaMono from "../styles/botones.module.css";
 }
 
 .info h1 {
@@ -88,78 +91,86 @@
 }
 
 .precio {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-primary);
+  font-size: var(--texto-24);
+  font-weight: 500;
+  color: var(--color-bosque);
   margin: 0;
 }
 
 .historia {
-  color: var(--color-text-muted);
-  line-height: 1.5;
+  color: var(--color-peltre);
+  font-size: var(--texto-16);
+  font-weight: 300;
+  line-height: 1.6;
   margin: 0;
 }
 
+/* Bloque del artesano: tarjeta piedra con foto circular. */
 .artesano {
   display: flex;
-  gap: 14px;
+  gap: var(--espacio-2);
   align-items: flex-start;
-  margin-top: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--color-border);
+  padding: var(--espacio-2);
+  background: var(--color-piedra);
+  border-radius: var(--radio-tarjeta);
+}
+
+/* Botón que envuelve la foto: abre el modal con la foto ampliada y el mapa. */
+.artesanoFotoBoton {
+  flex-shrink: 0;
+  min-width: var(--alto-tactil);
+  min-height: var(--alto-tactil);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: zoom-in;
 }
 
 .artesanoFoto {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--color-border);
+  overflow: hidden;
 }
 
 .artesanoNombre {
-  font-size: 15px;
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-16);
+  font-weight: 500;
+  letter-spacing: 0;
   margin: 0;
 }
 
-.artesanoRegion {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  margin: 2px 0 0;
-}
-
 .artesanoHistoria {
-  font-size: 13px;
-  color: var(--color-text-muted);
+  font-size: var(--texto-14);
+  color: var(--color-peltre);
   line-height: 1.5;
-  margin: 6px 0 0;
+  margin: 4px 0 0;
 }
 
 .contactar {
-  margin-top: 8px;
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.contactar:hover:not(:disabled) {
-  background: var(--color-primary-hover);
-}
-
-.contactar:disabled {
-  background: var(--color-border);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
+  composes: primario from "../styles/botones.module.css";
+  align-self: flex-start;
+  min-height: 52px;
+  padding: 0 var(--espacio-4);
+  font-size: var(--texto-16);
 }
 
 .contactarNota {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  margin: -4px 0 0;
+  font-size: var(--texto-12);
+  color: var(--color-peltre);
+  margin: 0;
+}
+
+@media (max-width: 599px) {
+  .page {
+    padding-inline: var(--espacio-2);
+  }
+
+  .contactar {
+    align-self: stretch;
+  }
 }

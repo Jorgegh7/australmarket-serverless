@@ -1,0 +1,173 @@
+.wrapper {
+  width: 100%;
+  max-width: var(--ancho-contenedor);
+  margin: var(--espacio-3) auto 0;
+  padding: 0 var(--espacio-3);
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(480px, 70vh, 720px);
+  overflow: hidden;
+  border-radius: var(--radio-grande);
+  background: var(--color-bosque);
+  isolation: isolate;
+}
+
+.imagen {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Velo bosque sólido, sin degradado. */
+.velo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--velo-hero);
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+  max-width: 680px;
+  padding: var(--espacio-4) var(--espacio-3);
+  color: var(--color-lienzo);
+}
+
+.etiqueta {
+  display: inline-flex;
+  padding: 4px 12px;
+  border: 1px solid var(--color-lienzo);
+  border-radius: var(--radio-pill);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-12);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-lienzo);
+}
+
+.titulo {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--fuente-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-lienzo);
+}
+
+.frase {
+  max-width: 44ch;
+  font-size: var(--texto-20);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--color-lienzo);
+}
+
+/* Botón invertido sobre la imagen oscura. */
+.boton {
+  composes: invertido from "../styles/botones.module.css";
+  margin-top: var(--espacio-1);
+  padding: 0 var(--espacio-4);
+  min-height: 52px;
+  font-size: var(--texto-16);
+}
+
+.hero :focus-visible {
+  outline-color: var(--color-lienzo);
+}
+
+/* Tarjeta flotante: solo desde 900px. Plana y sólida. */
+.tarjeta {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .contenido {
+    padding: var(--espacio-5);
+  }
+
+  .tarjeta {
+    position: absolute;
+    right: var(--espacio-3);
+    bottom: var(--espacio-3);
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    max-width: 340px;
+    padding: var(--espacio-2);
+    background: var(--color-lienzo);
+    border: 1px solid var(--color-escarcha);
+    border-radius: var(--radio-tarjeta);
+    color: var(--color-bosque);
+    text-decoration: none;
+  }
+
+  .tarjeta:hover {
+    border-color: var(--color-bosque);
+  }
+
+  .tarjeta:focus-visible {
+    outline-color: var(--color-bosque);
+  }
+}
+
+.miniatura {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: var(--radio-imagen);
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.tarjetaTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tarjetaNombre {
+  font-family: var(--fuente-display);
+  font-size: var(--texto-16);
+  font-weight: 300;
+  line-height: 1.25;
+}
+
+.tarjetaPrecio {
+  font-size: var(--texto-14);
+  font-weight: 500;
+}
+
+.tarjetaEnlace {
+  font-size: var(--texto-12);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 599px) {
+  .wrapper {
+    padding: 0 var(--espacio-2);
+  }
+
+  .hero {
+    min-height: 480px;
+  }
+
+  .contenido {
+    padding: var(--espacio-3) var(--espacio-2);
+  }
+}

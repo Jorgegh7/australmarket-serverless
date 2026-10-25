@@ -1,0 +1,95 @@
+/*
+ * Tokens de AustralMarket. Ver DESIGN.md en la raíz del frontend.
+ * Sistema plano: sin sombras ni degradados. Todo el proyecto consume estas
+ * variables; no se define color directamente en los componentes.
+ */
+:root {
+  /* Color */
+  --color-lienzo: #fcfcf7;
+  --color-piedra: #eeeee9;
+  --color-bosque: #1c3a13;
+  --color-bosque-claro: #264a1b; /* superficie sobre secciones bosque */
+  --color-lima: #d3fa99;
+  --color-musgo: #757c5d;
+  --color-oliva: #9f995b;
+  --color-eucalipto: #698e79;
+  --color-escarcha: #c4c7c4;
+  --color-ceniza: #b3b3b3;
+  --color-peltre: #666666;
+  --color-tinta: #000000;
+  --color-error: #a4492f;
+
+  --velo-hero: rgba(28, 58, 19, 0.45);
+  --velo-modal: rgba(28, 58, 19, 0.6);
+
+  /* Tipografía */
+  --fuente-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --fuente-texto: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --fuente-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --texto-10: 10px;
+  --texto-12: 12px;
+  --texto-14: 14px;
+  --texto-16: 16px;
+  --texto-20: 20px;
+  --texto-24: 24px;
+  --texto-32: 32px;
+  --texto-48: 48px;
+
+  /* Espaciado (base 8px) */
+  --espacio-1: 8px;
+  --espacio-2: 16px;
+  --espacio-3: 24px;
+  --espacio-4: 32px;
+  --espacio-5: 48px;
+  --espacio-6: 64px;
+  --espacio-7: 96px;
+  --espacio-8: 128px;
+
+  /* Forma */
+  --radio-pill: 1000px;
+  --radio-tarjeta: 16px;
+  --radio-grande: 32px;
+  --radio-input: 8px;
+  --radio-imagen: 12px;
+
+  --ancho-contenedor: 1200px;
+  --alto-navbar: 64px;
+  --alto-tactil: 44px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--color-lienzo);
+  color: var(--color-bosque);
+  font-family: var(--fuente-texto);
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-bosque);
+  font-weight: 400;
+}
+
+h1,
+h2 {
+  font-family: var(--fuente-display);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-bosque);
+  outline-offset: 2px;
+}

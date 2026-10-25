@@ -172,18 +172,18 @@ export default function GestionProductos() {
                         <tbody>
                             {productos.map((producto) => (
                                 <tr key={producto.id}>
-                                    <td>
+                                    <td data-label="Imagen">
                                         <Imagen
                                             src={producto.imagen_url_firmada}
                                             alt={`Imagen de ${producto.nombre}`}
                                             className={styles.miniatura}
                                         />
                                     </td>
-                                    <td>{producto.nombre}</td>
-                                    <td>{artesanoPorId.get(String(producto.artesano_id))?.nombre ?? "—"}</td>
-                                    <td>{producto.categoria || "—"}</td>
-                                    <td>{formatPrecioCLP(producto.precio)}</td>
-                                    <td>
+                                    <td data-label="Nombre">{producto.nombre}</td>
+                                    <td data-label="Artesano">{artesanoPorId.get(String(producto.artesano_id))?.nombre ?? "—"}</td>
+                                    <td data-label="Categoría">{producto.categoria || "—"}</td>
+                                    <td data-label="Precio">{formatPrecioCLP(producto.precio)}</td>
+                                    <td data-label="Acciones">
                                         <div className={styles.acciones}>
                                             <button
                                                 type="button"

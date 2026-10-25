@@ -1,0 +1,36 @@
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-6) var(--espacio-3);
+  text-align: center;
+}
+
+.codigo {
+  composes: etiquetaMono from "../styles/botones.module.css";
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-48);
+}
+
+.texto {
+  max-width: 44ch;
+  color: var(--color-peltre);
+  font-weight: 300;
+}
+
+.boton {
+  composes: primario from "../styles/botones.module.css";
+  margin-top: var(--espacio-1);
+}
+
+@media (max-width: 719px) {
+  .titulo {
+    font-size: var(--texto-32);
+  }
+}

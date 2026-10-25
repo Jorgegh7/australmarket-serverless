@@ -14,12 +14,14 @@ export default function ProductCard({ producto, artesano }: ProductCardProps) {
         <Link to={`/producto/${producto.id}`} className={styles.card}>
             <div className={styles.imageWrapper}>
                 <Imagen src={producto.imagen_url} alt={producto.nombre} className={styles.image} />
-                <span className={styles.badge}>{producto.categoria}</span>
             </div>
             <div className={styles.body}>
+                <div className={styles.etiquetas}>
+                    {producto.categoria && <span className={styles.etiqueta}>{producto.categoria}</span>}
+                    {artesano?.region && <span className={styles.etiqueta}>{artesano.region}</span>}
+                </div>
                 <h3 className={styles.nombre}>{producto.nombre}</h3>
                 <p className={styles.artesano}>{artesano?.nombre ?? "Artesano no disponible"}</p>
-                {artesano?.region && <p className={styles.region}>{artesano.region}</p>}
                 <p className={styles.precio}>{formatPrecioCLP(producto.precio)}</p>
             </div>
         </Link>

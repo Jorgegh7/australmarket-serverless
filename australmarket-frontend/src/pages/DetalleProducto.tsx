@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError, callApi } from "../api/client";
 import ContactoModal from "../components/ContactoModal";
+import ArtesanoModal from "../components/ArtesanoModal";
 import Imagen from "../components/Imagen";
 import { formatPrecioCLP } from "../utils/formatPrecio";
 import type { ProductoDetalle } from "../types/productoDetalle";
@@ -16,6 +17,7 @@ export default function DetalleProducto() {
     const [estado, setEstado] = useState<Estado>("cargando");
     const [errorMensaje, setErrorMensaje] = useState<string | null>(null);
     const [confirmandoContacto, setConfirmandoContacto] = useState(false);
+    const [verArtesano, setVerArtesano] = useState(false);
 
     // Una sola llamada a GET /catalogo/productos/{id}. 400/404 = no encontrado.
     useEffect(() => {
@@ -57,30 +59,30 @@ export default function DetalleProducto() {
 
     if (estado === "cargando") {
         return (
-            <main className={styles.page}>
+            <div className={styles.page}>
                 <p className={styles.status}>Cargando producto…</p>
-            </main>
+            </div>
         );
     }
 
     if (estado === "error") {
         return (
-            <main className={styles.page}>
+            <div className={styles.page}>
                 <p className={styles.status} role="alert">
                     {errorMensaje}
                 </p>
-            </main>
+            </div>
         );
     }
 
     if (estado === "no-encontrado" || !producto) {
         return (
-            <main className={styles.page}>
+            <div className={styles.page}>
                 <p className={styles.status}>Producto no encontrado</p>
                 <Link to="/" className={styles.backLink}>
                     Volver al catálogo
                 </Link>
-            </main>
+            </div>
         );
     }
 
@@ -97,7 +99,7 @@ export default function DetalleProducto() {
     }
 
     return (
-        <main className={styles.page}>
+        <div className={styles.page}>
             <nav className={styles.breadcrumb} aria-label="Ruta de navegación">
                 <Link to="/">Inicio</Link>
                 <span aria-hidden="true">/</span>
@@ -110,20 +112,29 @@ export default function DetalleProducto() {
                 <Imagen src={producto.imagen_url} alt={producto.nombre} className={styles.imagen} />
 
                 <div className={styles.info}>
-                    <span className={styles.badge}>{producto.categoria}</span>
+                    <div className={styles.etiquetas}>
+                        {producto.categoria && <span className={styles.etiqueta}>{producto.categoria}</span>}
+                        {artesano.region && <span className={styles.etiqueta}>{artesano.region}</span>}
+                    </div>
                     <h1>{producto.nombre}</h1>
                     <p className={styles.precio}>{formatPrecioCLP(producto.precio)}</p>
                     <p className={styles.historia}>{producto.historia}</p>
 
                     <div className={styles.artesano}>
-                        <Imagen
-                            src={artesano.foto_perfil_url}
-                            alt={artesano.nombre}
-                            className={styles.artesanoFoto}
-                        />
+                        <button
+                            type="button"
+                            className={styles.artesanoFotoBoton}
+                            onClick={() => setVerArtesano(true)}
+                            aria-label={`Ampliar foto de ${artesano.nombre} y ver su ubicación`}
+                        >
+                            <Imagen
+                                src={artesano.foto_perfil_url}
+                                alt=""
+                                className={styles.artesanoFoto}
+                            />
+                        </button>
                         <div>
                             <h2 className={styles.artesanoNombre}>{artesano.nombre}</h2>
-                            <p className={styles.artesanoRegion}>{artesano.region}</p>
                             <p className={styles.artesanoHistoria}>{artesano.historia}</p>
                         </div>
                     </div>
@@ -134,13 +145,23 @@ export default function DetalleProducto() {
                         disabled={!numeroWhatsapp}
                         onClick={() => setConfirmandoContacto(true)}
                     >
-                        Contactar al artesano
+                        Contactar por WhatsApp
                     </button>
                     {!numeroWhatsapp && (
                         <p className={styles.contactarNota}>Este artesano no tiene contacto disponible</p>
                     )}
                 </div>
             </div>
+
+            {verArtesano && (
+                <ArtesanoModal
+                    nombre={artesano.nombre}
+                    region={artesano.region}
+                    historia={artesano.historia}
+                    foto={artesano.foto_perfil_url}
+                    onCerrar={() => setVerArtesano(false)}
+                />
+            )}
 
             {confirmandoContacto && (
                 <ContactoModal
@@ -150,6 +171,6 @@ export default function DetalleProducto() {
                     onContinuar={continuarAWhatsapp}
                 />
             )}
-        </main>
+        </div>
     );
 }

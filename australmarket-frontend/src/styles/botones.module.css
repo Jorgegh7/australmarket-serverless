@@ -1,0 +1,140 @@
+/*
+ * Botones y enlaces compartidos (DESIGN.md). Se reutilizan con `composes`.
+ * Planos: sin sombras, píldora, altura táctil mínima de 44px.
+ */
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-1);
+  min-height: var(--alto-tactil);
+  padding: 0 var(--espacio-3);
+  border: 1px solid transparent;
+  border-radius: var(--radio-pill);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-14);
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primario {
+  composes: base;
+  background: var(--color-bosque);
+  color: var(--color-lienzo);
+}
+
+.primario:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.secundario {
+  composes: base;
+  background: transparent;
+  color: var(--color-bosque);
+  border-color: var(--color-bosque);
+}
+
+.secundario:hover:not(:disabled) {
+  background: var(--color-piedra);
+}
+
+/* Sobre secciones bosque. */
+.invertido {
+  composes: base;
+  background: var(--color-lienzo);
+  color: var(--color-bosque);
+}
+
+.invertido:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Acción destructiva. */
+.peligro {
+  composes: base;
+  background: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.peligro:hover:not(:disabled) {
+  background: var(--color-piedra);
+}
+
+/* Link de texto con flecha. */
+.enlaceFlecha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-tactil);
+  color: var(--color-bosque);
+  font-size: var(--texto-14);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.enlaceFlecha::after {
+  content: "\2192";
+  margin-left: 6px;
+}
+
+/* Etiqueta mono: píldora con borde escarcha. */
+.etiquetaMono {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border: 1px solid var(--color-escarcha);
+  border-radius: var(--radio-pill);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-12);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-bosque);
+}
+
+/* Badge: píldora lima (destacados / nuevo). */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radio-pill);
+  background: var(--color-lima);
+  color: var(--color-bosque);
+  font-size: var(--texto-12);
+  font-weight: 500;
+}
+
+/* Campos de formulario compartidos. */
+.input {
+  width: 100%;
+  min-height: var(--alto-tactil);
+  padding: 10px 12px;
+  border: 1px solid var(--color-escarcha);
+  border-radius: var(--radio-input);
+  background: var(--color-lienzo);
+  color: var(--color-bosque);
+  font-size: var(--texto-16);
+}
+
+.input:focus-visible {
+  border-color: var(--color-bosque);
+  outline: 2px solid var(--color-bosque);
+  outline-offset: 0;
+}
+
+.mensajeError {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radio-input);
+  color: var(--color-error);
+  font-size: var(--texto-14);
+}

@@ -154,19 +154,19 @@ export default function GestionArtesanos() {
                         <tbody>
                             {artesanos.map((artesano) => (
                                 <tr key={artesano.id}>
-                                    <td>
+                                    <td data-label="Imagen">
                                         <Imagen
                                             src={artesano.foto_perfil_url_firmada}
                                             alt={`Foto de ${artesano.nombre}`}
                                             className={styles.miniatura}
                                         />
                                     </td>
-                                    <td>{artesano.nombre}</td>
-                                    <td>{artesano.region || "—"}</td>
-                                    <td>{artesano.telefono || "—"}</td>
-                                    <td>{artesano.mail || "—"}</td>
-                                    <td>{artesano.red_social || "—"}</td>
-                                    <td>
+                                    <td data-label="Nombre">{artesano.nombre}</td>
+                                    <td data-label="Región">{artesano.region || "—"}</td>
+                                    <td data-label="Teléfono">{artesano.telefono || "—"}</td>
+                                    <td data-label="Correo">{artesano.mail || "—"}</td>
+                                    <td data-label="Red social">{artesano.red_social || "—"}</td>
+                                    <td data-label="Acciones">
                                         <div className={styles.acciones}>
                                             <button
                                                 type="button"

@@ -1,82 +1,163 @@
 .page {
   flex: 1;
-  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+}
+
+.catalogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
   width: 100%;
-  box-sizing: border-box;
+  max-width: var(--ancho-contenedor);
+  margin: 0 auto;
+  padding: var(--espacio-6) var(--espacio-3);
+  /* Navbar fijo (64px) + aire, para que el h2 no quede tapado al hacer scroll. */
+  scroll-margin-top: 96px;
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.brand {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.hero {
+.encabezado {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--espacio-1);
 }
 
-.eyebrow {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+.encabezado h2 {
+  margin: 0;
 }
 
-.hero p {
-  color: var(--color-text-muted);
-  font-size: 15px;
+.encabezado p {
+  color: var(--color-peltre);
+  font-size: var(--texto-16);
+  font-weight: 300;
 }
 
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--espacio-2);
 }
 
 .filterField {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text);
-  min-width: 180px;
+  min-width: 220px;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-12);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-peltre);
 }
 
+/* Filtros como píldoras. */
 .filterField select {
-  padding: 8px 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  font-size: 14px;
-  background: var(--color-surface);
-  color: var(--color-text);
+  min-height: var(--alto-tactil);
+  padding: 0 var(--espacio-3);
+  border: 1px solid var(--color-escarcha);
+  border-radius: var(--radio-pill);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-14);
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--color-lienzo);
+  color: var(--color-bosque);
+}
+
+.filterField select:hover {
+  border-color: var(--color-bosque);
+}
+
+.filterField select:focus-visible {
+  border-color: var(--color-bosque);
+  outline: 2px solid var(--color-bosque);
+  outline-offset: 0;
 }
 
 .status {
-  color: var(--color-text-muted);
-  padding: 32px 0;
+  color: var(--color-peltre);
+  padding: var(--espacio-4) 0;
   text-align: center;
+}
+
+.activos {
+  display: flex;
+}
+
+/* Píldora de filtro activo: borde bosque, quita el filtro al pulsarla. */
+.filtroActivo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  min-height: var(--alto-tactil);
+  padding: 0 var(--espacio-3);
+  border: 1px solid var(--color-bosque);
+  border-radius: var(--radio-pill);
+  background: transparent;
+  color: var(--color-bosque);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-12);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.filtroActivo:hover {
+  background: var(--color-piedra);
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-4) 0;
+  color: var(--color-peltre);
+  text-align: center;
+}
+
+.verTodo {
+  composes: enlaceFlecha from "../styles/botones.module.css";
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--espacio-2);
+}
+
+@media (max-width: 1099px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 719px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 419px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 599px) {
+  .catalogo {
+    padding-inline: var(--espacio-2);
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .filterField {
+    min-width: 0;
+    width: 100%;
+  }
 }

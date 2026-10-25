@@ -1,31 +1,10 @@
 /*
- * Paleta de AustralMarket (azul pizarra + gris, ver docs/wireframes).
- * Variables centralizadas acá: todo el resto del proyecto las consume,
- * no se define color directamente en los componentes.
+ * Base mínima. La paleta, tipografías y formas viven en styles/tokens.css
+ * (ver DESIGN.md). Acá solo el reset.
  */
 :root {
-  --color-bg: #eef1f5;
-  --color-surface: #ffffff;
-  --color-border: #dbe1e8;
-
-  --color-text: #2a3542;
-  --color-text-muted: #5b6672;
-
-  --color-primary: #3f4a5c;
-  --color-primary-hover: #333d4d;
-  --color-primary-contrast: #ffffff;
-
-  --color-danger: #c0392b;
-  --color-danger-bg: #fdecea;
-
-  --color-focus: #4a6fa5;
-
-  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-
-  font: 16px/145% var(--font-sans);
+  font: 16px/1.5 var(--fuente-texto);
   color-scheme: light;
-  color: var(--color-text);
-  background: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -38,6 +17,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 #root {
@@ -49,18 +29,30 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 8px;
+  margin: 0 0 var(--espacio-1);
+  line-height: 1.15;
 }
 
 h1 {
-  font-size: 28px;
+  font-size: var(--texto-48);
 }
 
 h2 {
-  font-size: 22px;
+  font-size: var(--texto-32);
+}
+
+h3 {
+  font-size: var(--texto-20);
+}
+
+@media (max-width: 719px) {
+  h1 {
+    font-size: var(--texto-32);
+  }
+
+  h2 {
+    font-size: var(--texto-24);
+  }
 }
 
 p {
@@ -68,15 +60,16 @@ p {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-bosque);
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+img {
+  max-width: 100%;
 }

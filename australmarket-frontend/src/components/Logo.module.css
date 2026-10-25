@@ -1,0 +1,40 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  color: var(--color-bosque);
+}
+
+.claro {
+  color: var(--color-lienzo);
+}
+
+.icono {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.cuerpo {
+  fill: var(--color-bosque);
+}
+
+.cumbre {
+  fill: var(--color-lienzo);
+}
+
+.claro .cuerpo {
+  fill: var(--color-lienzo);
+}
+
+.claro .cumbre {
+  fill: var(--color-bosque);
+}
+
+.texto {
+  font-family: var(--fuente-display);
+  font-size: var(--texto-24);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}

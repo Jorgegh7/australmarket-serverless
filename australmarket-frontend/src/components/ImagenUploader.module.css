@@ -1,13 +1,17 @@
+/* Zona de carga: borde punteado escarcha. */
 .uploader {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--espacio-1);
+  padding: var(--espacio-2);
+  border: 1px dashed var(--color-escarcha);
+  border-radius: var(--radio-tarjeta);
 }
 
 .label {
-  font-size: 13px;
+  font-size: var(--texto-14);
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--color-bosque);
 }
 
 /* El input real queda oculto; se acciona desde el botón "Seleccionar/Cambiar". */
@@ -18,27 +22,15 @@
 .botones {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--espacio-1);
 }
 
 .elegir {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
+  composes: secundario from "../styles/botones.module.css";
 }
 
-.elegir:hover:not(:disabled) {
-  background: var(--color-bg);
-}
-
-.elegir:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.quitar {
+  composes: peligro from "../styles/botones.module.css";
 }
 
 .preview {
@@ -47,48 +39,23 @@
   max-width: 100%;
   object-fit: cover;
   align-self: flex-start;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  background: var(--color-bg);
+  border-radius: var(--radio-imagen);
+  background: var(--color-piedra);
+  overflow: hidden;
 }
 
 .ayuda {
   margin: 0;
-  font-size: 12px;
-  color: var(--color-text-muted);
+  font-size: var(--texto-12);
+  color: var(--color-peltre);
 }
 
 .subiendo {
   margin: 0;
-  font-size: 13px;
-  color: var(--color-text-muted);
+  font-size: var(--texto-14);
+  color: var(--color-peltre);
 }
 
 .error {
-  margin: 0;
-  background: var(--color-danger-bg);
-  color: var(--color-danger);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-.quitar {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.quitar:hover:not(:disabled) {
-  background: var(--color-bg);
-}
-
-.quitar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  composes: mensajeError from "../styles/botones.module.css";
 }

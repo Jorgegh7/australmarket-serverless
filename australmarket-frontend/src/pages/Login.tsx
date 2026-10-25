@@ -35,15 +35,8 @@ export default function Login() {
     }
 
     return (
-        <main className={styles.page}>
+        <div className={styles.page}>
             <div className={styles.card}>
-                <div className={styles.brand}>
-                    <span className={styles.brandName}>AustralMarket</span>
-                    <span className={styles.brandTagline}>Productos artesanales del sur de Chile</span>
-                </div>
-
-                <hr className={styles.divider} />
-
                 <h1 className={styles.title}>Iniciar sesión</h1>
                 <p className={styles.subtitle}>Ingresa tus credenciales para continuar</p>
 
@@ -101,6 +94,6 @@ export default function Login() {
                     Volver al catálogo
                 </Link>
             </div>
-        </main>
+        </div>
     );
 }

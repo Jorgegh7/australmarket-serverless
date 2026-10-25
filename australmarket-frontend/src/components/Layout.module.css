@@ -1,0 +1,40 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100svh;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.main:focus {
+  outline: none;
+}
+
+/* Enlace "Saltar al contenido": invisible hasta recibir foco por teclado. */
+.saltar {
+  position: absolute;
+  top: var(--espacio-1);
+  left: var(--espacio-1);
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-tactil);
+  padding: 0 var(--espacio-2);
+  background: var(--color-bosque);
+  color: var(--color-lienzo);
+  font-weight: 500;
+  border-radius: var(--radio-pill);
+  text-decoration: none;
+  transform: translateY(-300%);
+}
+
+.saltar:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--color-lienzo);
+  outline-offset: -4px;
+}

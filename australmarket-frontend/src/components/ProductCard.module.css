@@ -1,72 +1,70 @@
 .card {
   display: flex;
   flex-direction: column;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  overflow: hidden;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2);
+  background: var(--color-piedra);
+  border: 1px solid transparent;
+  border-radius: var(--radio-tarjeta);
   text-decoration: none;
-  color: inherit;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  color: var(--color-bosque);
 }
 
+/* Hover plano: solo cambia el borde, sin elevación ni sombra. */
 .card:hover {
-  box-shadow: 0 10px 20px -8px rgba(42, 53, 66, 0.18);
-  transform: translateY(-2px);
+  border-color: var(--color-bosque);
 }
 
 .imageWrapper {
-  position: relative;
   aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radio-imagen);
 }
 
 .image,
 .imageWrapper > div {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-}
-
 .body {
-  padding: 14px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+}
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
+  margin-bottom: 4px;
+}
+
+.etiqueta {
+  composes: etiquetaMono from "../styles/botones.module.css";
+  background: var(--color-lienzo);
 }
 
 .nombre {
-  font-size: 16px;
-  margin: 0 0 2px;
+  margin: 0;
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-16);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-bosque);
 }
 
 .artesano {
   margin: 0;
-  font-size: 13px;
-  color: var(--color-text-muted);
-}
-
-.region {
-  margin: 0;
-  font-size: 12px;
-  color: var(--color-text-muted);
+  font-size: var(--texto-14);
+  color: var(--color-peltre);
 }
 
 .precio {
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--color-primary);
+  margin-top: 4px;
+  font-size: var(--texto-16);
+  font-weight: 500;
+  color: var(--color-bosque);
 }

@@ -1,14 +1,15 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--espacio-2);
 }
 
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
 }
 
 .toolbar h2 {
@@ -16,65 +17,48 @@
 }
 
 .nuevo {
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.nuevo:hover:not(:disabled) {
-  background: var(--color-primary-hover);
-}
-
-.nuevo:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  composes: primario from "../../styles/botones.module.css";
 }
 
 .error {
-  margin: 0;
-  background: var(--color-danger-bg);
-  color: var(--color-danger);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 14px;
+  composes: mensajeError from "../../styles/botones.module.css";
 }
 
 .status {
-  color: var(--color-text-muted);
-  padding: 24px 0;
+  color: var(--color-peltre);
+  padding: var(--espacio-3) 0;
   text-align: center;
 }
 
 .tableWrapper {
-  overflow-x: auto;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border: 1px solid var(--color-escarcha);
+  border-radius: var(--radio-tarjeta);
+  overflow: hidden;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  min-width: 640px;
+  font-size: var(--texto-14);
 }
 
 th,
 td {
-  padding: 10px 14px;
+  padding: 12px var(--espacio-2);
   text-align: left;
-  border-bottom: 1px solid var(--color-border);
-  white-space: nowrap;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-escarcha);
 }
 
 th {
-  background: var(--color-bg);
-  font-weight: 600;
-  color: var(--color-text);
+  background: var(--color-piedra);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-12);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-peltre);
+  white-space: nowrap;
 }
 
 tbody tr:last-child td {
@@ -83,38 +67,16 @@ tbody tr:last-child td {
 
 .acciones {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
 }
 
-.editar,
-.eliminar {
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  background: var(--color-surface);
-  color: var(--color-text);
-}
-
-.editar:hover:not(:disabled) {
-  background: var(--color-bg);
+.editar {
+  composes: secundario from "../../styles/botones.module.css";
 }
 
 .eliminar {
-  color: var(--color-danger);
-  border-color: var(--color-danger-bg);
-}
-
-.eliminar:hover:not(:disabled) {
-  background: var(--color-danger-bg);
-}
-
-.editar:disabled,
-.eliminar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  composes: peligro from "../../styles/botones.module.css";
 }
 
 .miniatura {
@@ -122,6 +84,79 @@ tbody tr:last-child td {
   width: 40px;
   height: 40px;
   object-fit: cover;
-  border-radius: 6px;
-  box-sizing: border-box;
+  border-radius: var(--radio-imagen);
+  overflow: hidden;
+}
+
+/* Bajo 720px cada fila se vuelve una tarjeta apilada (sin scroll horizontal). */
+@media (max-width: 719px) {
+  .tableWrapper {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  tbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+  }
+
+  tr {
+    background: var(--color-piedra);
+    border-radius: var(--radio-tarjeta);
+    padding: var(--espacio-1) var(--espacio-2);
+  }
+
+  td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+    padding: 10px 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--color-escarcha);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 1px solid var(--color-escarcha);
+  }
+
+  td:last-child,
+  tbody tr:last-child td:last-child {
+    border-bottom: none;
+  }
+
+  td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-family: var(--fuente-mono);
+    font-size: var(--texto-12);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-peltre);
+    text-align: left;
+  }
+
+  .acciones {
+    justify-content: flex-end;
+  }
 }

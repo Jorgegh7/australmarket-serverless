@@ -2,9 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  background: var(--color-lienzo);
+  border: 1px solid var(--color-escarcha);
+  color: var(--color-musgo);
 }
 
 .icon {
