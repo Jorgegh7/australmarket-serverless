@@ -65,6 +65,7 @@ HU-F4, HU-F6, HU-D1, HU-D2.
 | Identidad visual completa | Paleta, logo, header, navbar, hero, footer, detalle, login, panel y 404, con responsividad (sistema de diseño en `DESIGN.md`). |
 | Carrusel de regiones | Calculado en el frontend con datos que ya entrega la API; sin tabla ni imágenes propias. |
 | Lambda de prueba `GET /admin-test` | Se conserva a propósito como evidencia del proceso de construcción. |
+| Observabilidad nivel 1 | Log groups con retención de 30 días, 9 alarmas de errores de Lambda, alarma de 5xx de la API y notificación por correo con SNS. Todo en Terraform (`17-observabilidad.tf` y `18-alarmas.tf`). |
 
 ---
 
@@ -83,16 +84,19 @@ HU-F4, HU-F6, HU-D1, HU-D2.
 
 | Tema | Descripción |
 |---|---|
-| Rol de BD para el catálogo de artesanos | `catalogo-artesanos` comparte `artesanos_reader` con el panel; hoy los datos privados no salen por la consulta, no por permisos. Crear `catalogo_artesanos_reader` con `SELECT` solo sobre columnas públicas (ADR 009). |
+| Rol de BD para el catálogo de artesanos | `catalogo-artesanos` comparte `artesanos_reader` con el panel. Hoy los datos privados (teléfono, correo, red social) no salen gracias a la consulta, no a los permisos. Crear `catalogo_artesanos_reader` con `SELECT` solo sobre columnas públicas (ADR 009). |
+| Observabilidad avanzada | El nivel 1 está implementado (logs con retención de 30 días, alarmas de errores y de 5xx, aviso por correo vía SNS). Pendientes: tableros, trazas con X-Ray y logs estructurados. Se descartó por ahora por costo y por no haber equipo de TI. |
+| AWS WAF | Descartado por costo y alcance. Reevaluar si el tráfico crece o aparecen ataques. |
 | Archivos huérfanos en S3 | Una subida que luego se abandona deja un objeto sin referencia. Etiquetar los objetos y agregar una regla de ciclo de vida. |
 | CORS de la API | Acepta cualquier origen (`*`); restringirlo a los dominios propios. |
 | CloudFront | Servir imágenes con control de acceso al origen y caché, en lugar de URLs firmadas por consulta. |
 | KMS propio para DSQL | Cifrado del clúster con clave administrada por el proyecto. |
 | Lambda Authorizer | Diferenciar 401 (sin sesión) de 403 (sin permiso). |
 | Múltiples entornos | Hoy solo existe `dev`; separar `dev` y `prod`. |
+| Amplify como código | La app de Amplify se creó desde la consola; definirla en Terraform. |
 | Secrets Manager | Evaluar para configuración sensible futura. |
 | Terraform | Migrar los recursos restantes a módulos reutilizables. |
-| SQL | Script de migración que aplique `db/` en orden, y limpiar el bloque duplicado de `03-roles-productos.sql`. |
+| SQL | Script que aplique `db/` en orden y automatice su ejecución; limpiar el bloque duplicado de `03-roles-productos.sql`. |
 | Pruebas automatizadas | Pruebas unitarias de Lambdas y pruebas end-to-end del frontend. |
 
 ---
