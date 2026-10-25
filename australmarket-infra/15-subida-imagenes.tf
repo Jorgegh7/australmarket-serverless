@@ -64,12 +64,12 @@ module "generar_url_subida" {
 }
 
 # CORS del bucket: sin esto el navegador no puede hacer el PUT directo a S3.
-# Cuando exista el dominio de Amplify, se agrega a allowed_origins.
+# Orígenes permitidos: desarrollo local y dominio de Amplify.
 resource "aws_s3_bucket_cors_configuration" "australmarket" {
   bucket = aws_s3_bucket.australmarket.id
 
   cors_rule {
-    allowed_origins = ["http://localhost:5173", "http://localhost:5174"]
+    allowed_origins = ["http://localhost:5173", "http://localhost:5174", "https://master.dy9whm0ljtf0l.amplifyapp.com"]
     allowed_methods = ["PUT", "GET"]
     allowed_headers = ["*"]
     expose_headers  = ["ETag"]
