@@ -1,107 +1,119 @@
 # Product Backlog — AustralMarket
 
-Este es el backlog completo del proyecto (todo lo que hay que construir para el MVP), repartido en los **4 sprints de implementación** posteriores al Gate 1. El Sprint 1 (este) fue de diseño y propuesta — no construye funcionalidad, define cómo se va a construir.
+Backlog completo del proyecto, repartido en los **4 sprints de implementación** posteriores al Gate 1 (el Sprint 1 fue de diseño y propuesta). Este documento refleja el **estado de cierre del proyecto** (octubre de 2026): todas las historias del MVP quedaron completas, más trabajo adicional y una lista de deuda técnica explícita.
+
+**Estado general: 46 de 46 story points completados.**
 
 ## Backlog completo, por track
 
 ### Track Infraestructura / Backend
 
-| ID | Historia / tarea | Story points |
-|---|---|---|
-| HU-B1 | ✅ **Completa (Sprint 2).** Infraestructura base con Terraform: Aurora DSQL (esquema relacional con `FOREIGN KEY`, ver ADR 007), Cognito User Pool + Authorizer, bucket S3 (sin acceso público, cifrado), API Gateway (HTTP API), IAM (execution role base para Lambda, permisos específicos por función se agregan progresivamente). **Nota:** la conectividad Lambda↔BD se resolvió naturalmente al elegir Aurora DSQL — el clúster expone un endpoint público administrado con autenticación vía token IAM, sin necesitar VPC ni Data API — la pregunta original de "Lambda dentro de VPC vs. Data API" quedó sin objeto. | 5 |
-| HU-B2 | Iniciar sesión — integración Cognito + JWT Authorizer en API Gateway, con verificación de grupo (`cognito:groups`) desde el diseño inicial, no solo validación de token | 3 |
-| HU-B3 | CRUD de artesanos (backend) — crear y listar, incluyendo `foto_perfil_url` (S3), `telefono` (requerido para WhatsApp, HU-F6), `red_social` y `mail` (opcionales) | 3 |
-| HU-B4 | CRUD de productos (backend) — crear, editar, eliminar, con `FOREIGN KEY` a artesano | 5 |
-| HU-B5 | Endpoints públicos del catálogo — listar productos + detalle (sin autenticación) | 3 |
-| HU-B6 | Subida de imagen a S3 — Lambda que genera URL prefirmada para que el frontend suba directo (reutilizada tanto para imagen de producto como foto de artesano) | 3 |
+| ID | Historia / tarea | Pts | Estado |
+|---|---|---|---|
+| HU-B1 | Infraestructura base con Terraform: Aurora DSQL (esquema relacional con `FOREIGN KEY`, ver ADR 007), Cognito User Pool + Authorizer, bucket S3 (privado, cifrado con KMS), API Gateway (HTTP API) e IAM. La conectividad Lambda↔BD se resolvió con el endpoint público administrado de DSQL y autenticación por token IAM, sin VPC ni Data API. | 5 | ✅ Sprint 2 |
+| HU-B2 | Iniciar sesión: Cognito + JWT Authorizer en API Gateway, con verificación del grupo `cognito:groups` desde el diseño inicial. | 3 | ✅ Sprint 2 |
+| HU-B3 | CRUD de artesanos (backend) con `foto_perfil_url`, `telefono`, `red_social` y `mail`. | 3 | ✅ Sprint 3 |
+| HU-B4 | CRUD de productos (backend) con `FOREIGN KEY` a artesano. | 5 | ✅ Sprint 3 |
+| HU-B5 | Endpoints públicos del catálogo: listar productos y artesanos, y detalle de producto. | 3 | ✅ Sprint 4–5 |
+| HU-B6 | Subida de imagen a S3 con una Lambda que genera URL prefirmada, reutilizada para producto y artesano. | 3 | ✅ Sprint 3, integrada al panel en Sprint 5 |
 
 ### Track Frontend
 
-| ID | Historia / tarea | Story points |
-|---|---|---|
-| HU-F1 | Setup del proyecto frontend (React) — estructura, ruteo, conexión a la API. Incluye wireframes rápidos (login, catálogo, detalle producto, panel admin) antes de programar las pantallas | 3 |
-| HU-F2 | Pantalla de login (admin) | 2 |
-| HU-F3 | Panel admin — formulario crear/listar artesano, con upload de foto de perfil, teléfono, red social y mail (opcionales estos dos últimos) | 3 |
-| HU-F4 | Panel admin — formulario crear/editar/eliminar producto, con upload de imagen | 5 |
-| HU-F5 | Catálogo público — listado de productos (vista visitante) | 3 |
-| HU-F6 | Detalle de producto — vista pública con historia y foto del artesano, y botón de contacto vía WhatsApp (redirige externo, sin flujo de pago ni chat dentro de la plataforma) | 3 |
+| ID | Historia / tarea | Pts | Estado |
+|---|---|---|---|
+| HU-F1 | Setup del proyecto frontend (React): estructura, ruteo, conexión a la API y wireframes. | 3 | ✅ Sprint 2 |
+| HU-F2 | Pantalla de login (admin). | 2 | ✅ Sprint 4 |
+| HU-F3 | Panel admin: gestión de artesanos con foto de perfil, teléfono, red social y mail. | 3 | ✅ Sprint 4–5 |
+| HU-F4 | Panel admin: crear, editar y eliminar productos con subida de imagen. | 5 | ✅ Sprint 5 |
+| HU-F5 | Catálogo público: listado de productos. | 3 | ✅ Sprint 4 |
+| HU-F6 | Detalle de producto con historia y foto del artesano y botón de contacto por WhatsApp (con modal de confirmación). | 3 | ✅ Sprint 5 |
 
 ### Track Despliegue / QA
 
-| ID | Historia / tarea | Story points |
-|---|---|---|
-| HU-D1 | Configurar Amplify Hosting + CI/CD (build/deploy automático por `git push`) | 2 |
-| HU-D2 | Pruebas end-to-end del flujo completo + ajustes finales | 3 |
+| ID | Historia / tarea | Pts | Estado |
+|---|---|---|---|
+| HU-D1 | Amplify Hosting con CI/CD: build y despliegue automáticos por `git push` a `master`. | 2 | ✅ Sprint 5 |
+| HU-D2 | Pruebas end-to-end del flujo completo y ajustes finales. | 3 | ✅ Sprint 5 (verificación manual; las pruebas automatizadas quedan como deuda) |
 
-**Total del Product Backlog: 46 story points.**
+**Total del Product Backlog: 46 story points, todos completados.**
 
 ---
 
 ## Distribución en los 4 sprints
 
-La distribución respeta dependencias reales: no se puede construir el panel admin (frontend) antes de tener login funcionando (backend), ni el catálogo público antes de tener el endpoint que lo sirve.
+### Sprint 2 — Fundaciones (11 pts) ✅
+HU-B1, HU-B2, HU-F1.
 
-### Sprint 2 — Fundaciones (11 pts)
-- HU-B1 — Infraestructura base (Terraform)
-- HU-B2 — Login (backend)
-- HU-F1 — Setup del frontend + wireframes de las pantallas principales
+### Sprint 3 — Backend de datos (11 pts) ✅
+HU-B3, HU-B4, HU-B6.
 
-**Por qué primero:** sin esto, ningún otro track puede avanzar — es la base sobre la que se paran todos los sprints siguientes.
+### Sprint 4 — Frontend + catálogo público (11 pts) ✅
+HU-B5, HU-F2, HU-F3, HU-F5.
 
-### Sprint 3 — Backend de datos (11 pts)
-- HU-B3 — CRUD artesanos (backend)
-- HU-B4 — CRUD productos (backend)
-- HU-B6 — Subida de imagen a S3
-
-**Por qué segundo:** el frontend de administración (Sprint 4) necesita que estos endpoints ya existan para poder consumirlos.
-
-### Sprint 4 — Frontend + catálogo público (11 pts)
-- HU-B5 — Endpoints públicos del catálogo
-- HU-F2 — Pantalla de login
-- HU-F3 — Panel admin: formulario artesano
-- HU-F5 — Catálogo público (listado)
-
-### Sprint 5 — Cierre (13 pts)
-- HU-F4 — Panel admin: formulario producto (con upload)
-- HU-F6 — Detalle de producto + botón de contacto WhatsApp
-- HU-D1 — Amplify Hosting + CI/CD
-- HU-D2 — Pruebas end-to-end y ajustes finales
-
-**Por qué al final:** consolida lo construido, conecta el último flujo pendiente (upload de imagen desde el formulario), y deja el proyecto desplegado y probado de punta a punta.
+### Sprint 5 — Cierre (13 pts) ✅
+HU-F4, HU-F6, HU-D1, HU-D2.
 
 ---
 
-## Explícitamente fuera de este backlog (MVP)
+## Trabajo adicional realizado en el cierre (fuera del backlog original)
 
-- Registro/autopublicación de artesanos (decisión de curaduría por admin).
-- Roles/grupos diferenciados en Cognito (solo existe el rol admin).
+| Tema | Detalle |
+|---|---|
+| Bucket privado con URLs firmadas | Las Lambdas de lectura firman `GetObject` (1 h); se eliminó la lectura pública del bucket (ADR 008). |
+| Flujo de subida de imágenes desde el panel | Subida directa a S3 al guardar, con vista previa, cambio y quitado de imagen; CORS del bucket configurado para local y Amplify. |
+| Detalle de producto por id | Lambda propia con rol de base de datos y de IAM dedicados; es la única ruta pública que entrega el teléfono (para WhatsApp). |
+| Identidad visual completa | Paleta, logo, header, navbar, hero, footer, detalle, login, panel y 404, con responsividad (sistema de diseño en `DESIGN.md`). |
+| Carrusel de regiones | Calculado en el frontend con datos que ya entrega la API; sin tabla ni imágenes propias. |
+| Lambda de prueba `GET /admin-test` | Se conserva a propósito como evidencia del proceso de construcción. |
+
+---
+
+## Explícitamente fuera del MVP
+
+- Registro y autopublicación de artesanos (decisión de curaduría por admin).
+- Roles o grupos diferenciados en Cognito (solo existe el rol admin).
 - Soft delete de productos.
-- Cualquier flujo asíncrono — notificaciones, moderación, reportes (ver roadmap a futuro, doc de estudio sección 7.1).
+- Flujos asíncronos: notificaciones, moderación, reportes.
 - Carrito de compra o checkout.
-- Otra forma de contacto: ubicación/local físico — `telefono`, `red_social` y `mail` sí entran al MVP.
+- Ubicación o local físico como forma de contacto.
 
 ---
 
-## Propuesta a futuro: Sprint 6 — Sección propia de Artesanos (extra, fuera de los 4 sprints)
+## Deuda técnica registrada
 
-Evaluada con el mismo nivel de detalle que el resto del backlog, para poder contrastarla — y decidir conscientemente posponerla, no descartarla por defecto.
+| Tema | Descripción |
+|---|---|
+| Rol de BD para el catálogo de artesanos | `catalogo-artesanos` comparte `artesanos_reader` con el panel; hoy los datos privados no salen por la consulta, no por permisos. Crear `catalogo_artesanos_reader` con `SELECT` solo sobre columnas públicas (ADR 009). |
+| Archivos huérfanos en S3 | Una subida que luego se abandona deja un objeto sin referencia. Etiquetar los objetos y agregar una regla de ciclo de vida. |
+| CORS de la API | Acepta cualquier origen (`*`); restringirlo a los dominios propios. |
+| CloudFront | Servir imágenes con control de acceso al origen y caché, en lugar de URLs firmadas por consulta. |
+| KMS propio para DSQL | Cifrado del clúster con clave administrada por el proyecto. |
+| Lambda Authorizer | Diferenciar 401 (sin sesión) de 403 (sin permiso). |
+| Múltiples entornos | Hoy solo existe `dev`; separar `dev` y `prod`. |
+| Secrets Manager | Evaluar para configuración sensible futura. |
+| Terraform | Migrar los recursos restantes a módulos reutilizables. |
+| SQL | Script de migración que aplique `db/` en orden, y limpiar el bloque duplicado de `03-roles-productos.sql`. |
+| Pruebas automatizadas | Pruebas unitarias de Lambdas y pruebas end-to-end del frontend. |
 
-| Tarea | Por qué | Story points |
+---
+
+## Propuesta a futuro: Sprint 6 — Sección propia de Artesanos
+
+Evaluada con el mismo nivel de detalle que el resto del backlog, para decidir conscientemente posponerla y no descartarla por defecto.
+
+| Tarea | Por qué | Pts |
 |---|---|---|
-| Endpoint `GET /artesanos/{id}` | Traer datos de un artesano específico (nombre, historia, foto) | 1 |
-| Endpoint `GET /artesanos/{id}/productos` | Todos los productos de ese artesano (reutiliza la misma consulta `WHERE artesano_id = X` del detalle de producto) | 2 |
-| Pantalla: perfil de artesano | Datos + lista de sus productos (reutiliza el componente de card de producto del catálogo) | 3 |
-| Pantalla: listado de "Artesanos" | Catálogo de artesanos, análogo al de productos | 3 |
-| Navegación | Ruta/link nuevo en el menú del sitio | 1 |
+| Endpoint `GET /artesanos/{id}` | Datos de un artesano específico (nombre, historia, foto) | 1 |
+| Endpoint `GET /artesanos/{id}/productos` | Todos los productos de ese artesano (misma consulta `WHERE artesano_id = X`) | 2 |
+| Pantalla: perfil de artesano | Datos y lista de sus productos (reutiliza la card del catálogo) | 3 |
+| Pantalla: listado de artesanos | Análogo al catálogo de productos | 3 |
+| Navegación | Ruta y link nuevos en el menú | 1 |
 | **Total** | | **~10 pts** |
 
-**Por qué no entra en los 4 sprints actuales:** ~10 puntos equivalen aproximadamente a un sprint completo adicional (los Sprints 2-5 rondan 11-13 pts cada uno) — el tiempo disponible de la mentoría (16 ago–23 oct 2026, sprints quincenales) no contempla un quinto sprint de implementación. No es una limitación técnica ni de diseño (el modelo de datos ya lo soporta sin cambios — ver ADR 004), es una limitación de tiempo/alcance frente al resto del backlog priorizado.
-
-**Por qué el costo es relativamente bajo pese a ser "un sprint más":** reutiliza casi todo lo ya construido — mismo modelo de datos, misma lógica de consulta, mismo componente visual de card. No es una feature nueva desde cero, es una recombinación de piezas existentes.
-
-## Nota para el gate
-
-Los ~11-12 puntos por sprint son una carga pareja y realista para el ritmo de un estudiante trabajando en paralelo con otros ramos — ningún sprint concentra el doble de trabajo que otro. Si Danny pregunta por el "por qué de este orden", la respuesta corta es: **primero lo que nadie puede evitar depender de (infraestructura y auth), después el motor de datos, y al final la superficie visible (frontend) que consume todo lo anterior** — evita construir pantallas contra una API que todavía no existe.
+**Por qué no entró:** equivale a un sprint completo adicional, y el tiempo de la mentoría no contemplaba un quinto sprint de implementación. No es una limitación técnica: el modelo de datos ya lo soporta (ADR 004).
 
 ---
-*Para subir a GitHub: crear un Milestone por Sprint (Sprint 2, 3, 4, 5), un Issue por cada HU/tarea asignado a su Milestone correspondiente, y un Issue "Epic" que las enlace todas como checklist.*
+
+## Nota de cierre
+
+El orden de construcción fue deliberado: **primero lo que nadie puede evitar (infraestructura y autenticación), después el motor de datos, y al final la superficie visible (frontend)**, para no construir pantallas contra una API inexistente. En el cierre se tomó además una decisión de seguridad con costo real, pasar a un bucket privado con URLs firmadas, que se documentó en el ADR 008.
